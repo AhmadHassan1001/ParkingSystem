@@ -40,9 +40,9 @@ logs/
 spring.log
 
 # Application properties
-application*.yml
-application*.yaml
-application*.properties
+# application*.yml
+# application*.yaml
+# application*.properties
 
 # Database
 *.h2.db
