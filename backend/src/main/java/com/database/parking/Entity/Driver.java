@@ -1,10 +1,8 @@
 package com.database.parking.Entity;
 
-import java.util.List;
+import com.database.parking.Enums.PAYMENTMETHOD;
 
-public class Driver{
+public class Driver extends User{
     String licensePlateNumber;
-    String paymentMethod;
-    List<ParkingSpot> reservations;
-    List<Penalty> penalties;
+    PAYMENTMETHOD paymentMethod;
 }

@@ -1,4 +1,4 @@
-package com.database.parking.Entity;
+package com.database.parking.Enums;
 
 public enum PAYMENTMETHOD {
     CASH,

@@ -1,20 +1,18 @@
 package com.database.parking.Entity;
 
+import java.time.LocalDateTime;
+
 import com.database.parking.Enums.ReservationStatus;
 
 public class Reservation {
-    long reservationId;
+    long id;
 
     long driverId;
-    long parkingLotId;
-
     long spotId;
 
-    long startTime;
-    long endTime;
+    LocalDateTime startTime;
+    LocalDateTime endTime;
 
-    long penaltyAmount;
-    long totalAmount;
-
+    double cost;
     ReservationStatus status;
 }

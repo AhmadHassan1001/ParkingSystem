@@ -1,10 +1,10 @@
 package com.database.parking.Entity;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 public class Notification {
     long id;
+    long userId;
     String bodyText;
-    Date date;
-    // boolean isRead;
+    LocalDateTime date;
 }
