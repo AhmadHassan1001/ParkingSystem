@@ -1,4 +1,4 @@
-package com.database.parking.Controller;
+package com.database.parking.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
