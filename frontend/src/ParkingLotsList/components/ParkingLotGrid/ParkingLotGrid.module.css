@@ -1,0 +1,45 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  padding: 1rem;
+}
+
+/* Skeleton Loading Styles */
+.skeleton {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.skeletonImage {
+  background-color: #e5e7eb;
+  height: 12rem;
+  border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.skeletonContent {
+  padding: 1rem;
+}
+
+.skeletonTitle {
+  height: 1rem;
+  background-color: #e5e7eb;
+  border-radius: 0.25rem;
+  width: 75%;
+  margin-bottom: 0.5rem;
+}
+
+.skeletonText {
+  height: 1rem;
+  background-color: #e5e7eb;
+  border-radius: 0.25rem;
+  width: 50%;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .5;
+  }
+}
