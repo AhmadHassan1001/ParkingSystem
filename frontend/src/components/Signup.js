@@ -22,7 +22,7 @@ function Signup() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const url = role === 'DRIVER' ? '/signup/driver' : '/signup/parking-lot';
+    const url = role === 'DRIVER' ? 'http://localhost:8080/auth/signup/driver' : 'http://localhost:8080/auth/signup/parking-lot';
 
     const userData = {
       name,

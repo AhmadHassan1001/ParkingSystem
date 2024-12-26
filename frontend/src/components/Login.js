@@ -10,7 +10,7 @@ function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const url = '/login';
+    const url = '/auth/login';
 
     try {
       const response = await fetch(url, {
