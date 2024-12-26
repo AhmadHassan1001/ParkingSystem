@@ -2,9 +2,12 @@ package com.database.parking.Service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.database.parking.Entity.User;
 import com.database.parking.dao.UserDAO;
 
+@Service
 public class UserService {
 
     private UserDAO userDAO = new UserDAO();
