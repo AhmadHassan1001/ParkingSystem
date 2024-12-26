@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ParkingLot{
+public class ParkingLot {
     long id;
     String name;
     long locationId;

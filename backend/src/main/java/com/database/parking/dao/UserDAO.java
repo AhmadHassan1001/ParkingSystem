@@ -4,8 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,7 +61,28 @@ public class UserDAO {
         return user;
     }
     
-    
+    public User getByNameAndPassword(String name, String password) {
+        User user = null;
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+            String query = "SELECT * FROM user WHERE name = ? AND password = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, name);
+            statement.setString(2, password);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                user = User.builder()
+                        .id(resultSet.getLong("id"))
+                        .name(resultSet.getString("name"))
+                        .phone(resultSet.getString("phone"))
+                        .role(Role.valueOf(resultSet.getString("role")))
+                        .password(resultSet.getString("password"))
+                        .build();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return user;
+    }
 
     public void save(User user) {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
@@ -111,21 +132,21 @@ public class UserDAO {
     }
 
 
-    public static void main(String[] args) {
-        UserDAO userDAO = new UserDAO();
-        User user = User.builder()
-                .name("John mddmmdDoe")
-                .phone("123hdhdh4567890")
-                .role((Role.ADMIN))
-                .password("jfjdjfjfj")
-                .build();
-        userDAO.save(user);
-        System.out.println(userDAO.getAll());
-        user.setName("Jane Doe");
-        userDAO.update(user);
-        System.out.println(userDAO.getAll());
-        userDAO.delete(user.getId());
-        System.out.println(userDAO.getAll());
-    }
+    // public static void main(String[] args) {
+    //     UserDAO userDAO = new UserDAO();
+    //     User user = User.builder()
+    //             .name("John mddmmdDoe")
+    //             .phone("123hdhdh4567890")
+    //             .role((Role.ADMIN))
+    //             .password("jfjdjfjfj")
+    //             .build();
+    //     userDAO.save(user);
+    //     System.out.println(userDAO.getAll());
+    //     user.setName("Jane Doe");
+    //     userDAO.update(user);
+    //     System.out.println(userDAO.getAll());
+    //     userDAO.delete(user.getId());
+    //     System.out.println(userDAO.getAll());
+    // }
 
 }

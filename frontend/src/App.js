@@ -1,24 +1,27 @@
-import logo from './logo.svg';
+import React from 'react';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import './App.css';
+import AdminDashboard from './components/AdminDashboard';
+import Login from './components/Login';
+import ManagerDashboard from './components/ManagerDashboard';
+import Signup from './components/Signup';
+import SearchScreen from './userflow/SearchScreen';
+import ParkingLotDetails from './userflow/ParkingLotDetails';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div className="App">
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/search" element={<SearchScreen />} />
+          <Route path="/manager-dashboard" element={<ManagerDashboard />} />
+          <Route path="/admin-dashboard" element={<AdminDashboard />} />
+          <Route path="/parking-lot/:id" element={<ParkingLotDetails />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 

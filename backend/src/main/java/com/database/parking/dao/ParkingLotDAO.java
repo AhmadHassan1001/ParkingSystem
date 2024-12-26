@@ -30,6 +30,7 @@ public class ParkingLotDAO {
                         .locationId(resultSet.getLong("location_id"))
                         .capacity(resultSet.getInt("capacity"))
                         .basicPrice(resultSet.getDouble("basic_price"))
+                        .managerId(resultSet.getLong("manager_id"))
                         .build();
                 parkingLots.add(parkingLot);
             }
@@ -54,6 +55,7 @@ public class ParkingLotDAO {
                         .locationId(resultSet.getLong("location_id"))
                         .capacity(resultSet.getInt("capacity"))
                         .basicPrice(resultSet.getDouble("basic_price"))
+                        .managerId(resultSet.getLong("manager_id"))
                         .build();
             }
         } catch (SQLException e) {
@@ -109,6 +111,7 @@ public class ParkingLotDAO {
     }
 
 
+
     public static void main(String[] args) {
         ParkingLotDAO parkingLotDAO = new ParkingLotDAO();
         LocationDAO locationDAO = new LocationDAO();
@@ -133,7 +136,7 @@ public class ParkingLotDAO {
         ParkingLot updatedParkingLot = parkingLotDAO.getById(2L);
         if (updatedParkingLot != null) {
             updatedParkingLot.setCapacity(200);
-            updatedParkingLot.setName("ksksksksk Parking");
+            updatedParkingLot.setName("dsmdm Parking");
             updatedParkingLot.setManagerId(2L); // Assuming new managerId is 2
             parkingLotDAO.update(updatedParkingLot);
         }
