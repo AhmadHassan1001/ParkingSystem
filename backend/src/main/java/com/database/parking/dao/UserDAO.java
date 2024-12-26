@@ -16,7 +16,7 @@ public class UserDAO {
     private final String url = "jdbc:mysql://localhost:3306/parking_management_system";
     private final String username = "admin";
     private final String password = "admin";
-    
+
     public List<User> getAll() {
         List<User> users = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
@@ -60,7 +60,7 @@ public class UserDAO {
         }
         return user;
     }
-    
+
     public User getByNameAndPassword(String name, String password) {
         User user = null;
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
@@ -87,7 +87,7 @@ public class UserDAO {
     public void save(User user) {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             String query = "INSERT INTO user (name, phone, role, password) VALUES (?, ?, ?, ?)";
-            PreparedStatement statement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, user.getName());
             statement.setString(2, user.getPhone());
             statement.setString(3, user.getRole().toString());
@@ -98,7 +98,6 @@ public class UserDAO {
             if (rs.next()) {
                 user.setId(rs.getLong(1));
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -118,7 +117,6 @@ public class UserDAO {
             e.printStackTrace();
         }
     }
-    
 
     public void delete(long id) {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
@@ -130,23 +128,4 @@ public class UserDAO {
             e.printStackTrace();
         }
     }
-
-
-    // public static void main(String[] args) {
-    //     UserDAO userDAO = new UserDAO();
-    //     User user = User.builder()
-    //             .name("John mddmmdDoe")
-    //             .phone("123hdhdh4567890")
-    //             .role((Role.ADMIN))
-    //             .password("jfjdjfjfj")
-    //             .build();
-    //     userDAO.save(user);
-    //     System.out.println(userDAO.getAll());
-    //     user.setName("Jane Doe");
-    //     userDAO.update(user);
-    //     System.out.println(userDAO.getAll());
-    //     userDAO.delete(user.getId());
-    //     System.out.println(userDAO.getAll());
-    // }
-
 }
