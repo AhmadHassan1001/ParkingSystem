@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,14 +17,6 @@ public class UserDAO {
     private final String username = "admin";
     private final String password = "admin";
     
-    public UserDAO() {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
     public List<User> getAll() {
         List<User> users = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
@@ -73,12 +66,18 @@ public class UserDAO {
     public void save(User user) {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             String query = "INSERT INTO user (name, phone, role, password) VALUES (?, ?, ?, ?)";
-            PreparedStatement statement = connection.prepareStatement(query);
+            PreparedStatement statement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, user.getName());
             statement.setString(2, user.getPhone());
             statement.setString(3, user.getRole().toString());
             statement.setString(4, user.getPassword());
             statement.executeUpdate();
+
+            ResultSet rs = statement.getGeneratedKeys();
+            if (rs.next()) {
+                user.setId(rs.getLong(1));
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }

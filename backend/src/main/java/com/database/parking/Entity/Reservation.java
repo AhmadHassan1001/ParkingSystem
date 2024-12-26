@@ -20,12 +20,14 @@ import lombok.Setter;
 public class Reservation {
     long id;
 
-    long driverId;
-    long spotId;
+    long userId;
+    long parkingSpotId;
 
     LocalDateTime startTime;
     LocalDateTime endTime;
 
     double cost;
     ReservationStatus status;
+
+    boolean isPaid;
 }
