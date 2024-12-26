@@ -1,12 +1,12 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Login from './components/Login';
-import Signup from './components/Signup';
-import SearchScreen from './components/SearchScreen';
-import LotDetails from './components/LotDetails';
-import ManagerDashboard from './components/ManagerDashboard';
-import AdminDashboard from './components/AdminDashboard';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import './App.css';
+import AdminDashboard from './components/AdminDashboard';
+import Login from './components/Login';
+import ManagerDashboard from './components/ManagerDashboard';
+import Signup from './components/Signup';
+import SearchScreen from './userflow/SearchScreen';
+import ParkingLotDetails from './userflow/ParkingLotDetails';
 
 function App() {
   return (
@@ -16,9 +16,9 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/search" element={<SearchScreen />} />
-          <Route path="/lot-details" element={<LotDetails />} />
           <Route path="/manager-dashboard" element={<ManagerDashboard />} />
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
+          <Route path="/parking-lot/:id" element={<ParkingLotDetails />} />
         </Routes>
       </div>
     </Router>

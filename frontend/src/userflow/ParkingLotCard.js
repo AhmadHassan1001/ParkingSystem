@@ -20,7 +20,7 @@ function ParkingLotCard({ parkingLot }) {
         </div>
         <div className="footer">
           <span className="capacity">Capacity: {parkingLot.capacity}</span>
-          <span className="price">Price: ${parkingLot.price}</span>
+          <span className="price">Price: ${parkingLot.basicPrice}</span>
         </div>
       </div>
     </div>
