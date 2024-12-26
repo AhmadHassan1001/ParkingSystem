@@ -1,4 +1,6 @@
-package com.database.parking.Entity;
+package com.database.parking.models;
+
+import com.database.parking.enums.PaymentMethod;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,9 +13,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Location {
-    long id;
-    String city;
-    String street;
-    String mapLink;
+public class Driver {
+    Long userId;
+    String licensePlateNumber;
+    PaymentMethod paymentMethod;
 }

@@ -1,8 +1,8 @@
-package com.database.parking.Entity;
+package com.database.parking.models;
 
 import java.time.LocalDateTime;
 
-import com.database.parking.Enums.ReservationStatus;
+import com.database.parking.enums.ReservationStatus;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

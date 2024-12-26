@@ -8,8 +8,8 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.database.parking.Entity.ParkingSpot;
-import com.database.parking.Enums.SpotStatus;
+import com.database.parking.enums.SpotStatus;
+import com.database.parking.models.ParkingSpot;
 
 
 public class ParkingSpotDAO {

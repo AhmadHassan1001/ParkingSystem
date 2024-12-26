@@ -1,7 +1,7 @@
-package com.database.parking.Entity;
+package com.database.parking.models;
 
-import com.database.parking.Enums.SpotStatus;
-import com.database.parking.Enums.SpotType;
+import com.database.parking.enums.SpotStatus;
+import com.database.parking.enums.SpotType;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

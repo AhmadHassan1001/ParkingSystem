@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.database.parking.Entity.Location;
+import com.database.parking.models.Location;
 
 public class LocationDAO {
     private final String url = "jdbc:mysql://localhost:3306/parking_management_system";

@@ -9,8 +9,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.database.parking.Entity.User;
-import com.database.parking.Enums.Role;
+import com.database.parking.enums.Role;
+import com.database.parking.models.User;
 
 public class UserDAO {
     private final String url = "jdbc:mysql://localhost:3306/parking_management_system";

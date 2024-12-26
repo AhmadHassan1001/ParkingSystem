@@ -9,8 +9,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.database.parking.Entity.Reservation;
-import com.database.parking.Enums.ReservationStatus;
+import com.database.parking.enums.ReservationStatus;
+import com.database.parking.models.Reservation;
 
 public class ReservationDAO {
     private final String url = "jdbc:mysql://localhost:3306/parking_management_system";

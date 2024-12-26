@@ -1,4 +1,4 @@
-package com.database.parking.Entity;
+package com.database.parking.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,7 +13,9 @@ import lombok.Setter;
 @Setter
 public class ParkingLot{
     long id;
+    String name;
     long locationId;
+    long managerId;
     int capacity;
     double basicPrice;
 }

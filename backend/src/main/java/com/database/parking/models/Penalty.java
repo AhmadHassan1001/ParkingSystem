@@ -1,4 +1,4 @@
-package com.database.parking.Entity;
+package com.database.parking.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

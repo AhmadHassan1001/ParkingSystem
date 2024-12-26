@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.database.parking.Entity.Penalty;
+import com.database.parking.models.Penalty;
 
 public class PenaltyDAO {
     private static final String url = "jdbc:mysql://localhost:3306/parking_management_system";

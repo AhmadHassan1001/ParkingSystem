@@ -1,6 +1,6 @@
-package com.database.parking.Entity;
+package com.database.parking.models;
 
-import com.database.parking.Enums.PaymentMethod;
+import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,8 +13,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Driver {
-    Long userId;
-    String licensePlateNumber;
-    PaymentMethod paymentMethod;
+public class Notification {
+    long id;
+    long userId;
+    String bodyText;
+    LocalDateTime date;
 }

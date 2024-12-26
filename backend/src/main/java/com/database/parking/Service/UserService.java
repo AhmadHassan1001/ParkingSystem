@@ -1,11 +1,12 @@
-package com.database.parking.Service;
+package com.database.parking.service;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
-import com.database.parking.Entity.Driver;
-import com.database.parking.Entity.User;
+
 import com.database.parking.dao.UserDAO;
+import com.database.parking.models.Driver;
+import com.database.parking.models.User;
 
 @Service
 public class UserService {
