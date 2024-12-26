@@ -1,6 +1,6 @@
 package com.database.parking.Enums;
 
-public enum PAYMENTMETHOD {
+public enum PaymentMethod {
     CASH,
-    VISA
+    CREDIT_CARD
 }
