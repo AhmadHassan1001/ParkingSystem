@@ -42,7 +42,7 @@ spring.log
 # Application properties
 application*.yml
 application*.yaml
-application*.properties
+# application*.properties
 
 # Database
 *.h2.db
