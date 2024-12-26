@@ -9,6 +9,7 @@ function ParkingLotDetails() {
   const [parkingLot, setParkingLot] = useState(null);
   const [selectedSpot, setSelectedSpot] = useState(null);
 
+  
   useEffect(() => {
     const fetchParkingLotDetails = async () => {
       try {
