@@ -1,8 +1,10 @@
 .location_filter_label {
   color: white;
+  margin-bottom: 0.5rem;
 }
 
 .location_filter {
   color: white;
   background-color: white;
+  margin-bottom: 1.5rem;
 }

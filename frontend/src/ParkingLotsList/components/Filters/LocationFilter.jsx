@@ -8,7 +8,7 @@ function LocationFilter({ location, onChange }) {
 
   return (
     <FormControl fullWidth>
-      <InputLabel id="location-select-label" className={styles.location_filter_label}>City</InputLabel>
+      <label id="location-select-label" className={styles.location_filter_label}>City:</label>
       <Select
         labelId="location-select-label"
         value={location}
