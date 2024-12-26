@@ -10,7 +10,7 @@ function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const url = 'https://placeholder-url.com/api/authenticate';
+    const url = '/login';
 
     try {
       const response = await fetch(url, {
@@ -23,7 +23,8 @@ function Login() {
 
       if (response.ok) {
         const data = await response.json();
-        const role = data.role;
+        const { token, role } = data;
+        localStorage.setItem('token', token);
 
         // Redirect based on user role
         if (role === 'DRIVER') {

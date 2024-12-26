@@ -1,47 +1,48 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './AdminDashboard.css';
 import Navbar from './Navbar';
 
 function AdminDashboard() {
-  const notifications = [
-    { message: 'New user signed up' },
-    { message: 'Parking lot 3 has a new violation' },
-  ];
+  const [notifications, setNotifications] = useState([]);
+  const [topParkingLots, setTopParkingLots] = useState([]);
+  const [topDrivers, setTopDrivers] = useState([]);
 
-  const topParkingLots = [
-    {
-      id: 1,
-      name: 'Parking Lot 1',
-      occupancyRate: 95,
-      revenue: 10000,
-      violations: 1,
-    },
-    {
-      id: 2,
-      name: 'Parking Lot 2',
-      occupancyRate: 90,
-      revenue: 8000,
-      violations: 2,
-    },
-  ];
+  useEffect(() => {
+    const fetchAdminDashboardData = async () => {
+      try {
+        const response = await fetch('/admin-dashboard', {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+        const data = await response.json();
+        setTopParkingLots(data.topParkingLots);
+        setTopDrivers(data.topDrivers);
+      } catch (error) {
+        console.error('Error fetching admin dashboard data:', error);
+      }
+    };
 
-  const topDrivers = [
-    {
-      id: 1,
-      name: 'John Doe',
-      totalBookings: 50,
-      totalSpent: 500,
-    },
-    {
-      id: 2,
-      name: 'Jane Smith',
-      totalBookings: 45,
-      totalSpent: 450,
-    },
-  ];
+    const fetchNotifications = async () => {
+      try {
+        const response = await fetch('/notifications', {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+        const data = await response.json();
+        setNotifications(data);
+      } catch (error) {
+        console.error('Error fetching notifications:', error);
+      }
+    };
+
+    fetchAdminDashboardData();
+    fetchNotifications();
+  }, []);
 
   return (
-    <div  className="dashboard">
+    <div className="dashboard">
       <Navbar notifications={notifications} />
       <div>
         <h2>Admin Dashboard</h2>

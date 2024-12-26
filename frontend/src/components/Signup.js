@@ -22,7 +22,7 @@ function Signup() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const url = 'https://placeholder-url.com/api/signup';
+    const url = role === 'DRIVER' ? '/signup/driver' : '/signup/parking-lot';
 
     const userData = {
       name,
@@ -58,13 +58,15 @@ function Signup() {
       });
 
       if (response.ok) {
+        const data = await response.json();
+        const { token } = data;
+        localStorage.setItem('token', token);
+
         // Redirect based on user role
         if (role === 'DRIVER') {
           navigate('/search');
         } else if (role === 'MANAGEMENT') {
           navigate('/manager-dashboard');
-        } else if (role === 'ADMIN') {
-          navigate('/admin-dashboard');
         }
       } else {
         console.error('Signup failed');

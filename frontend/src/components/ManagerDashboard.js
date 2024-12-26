@@ -1,27 +1,48 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './ManagerDashboard.css';
 import Navbar from './Navbar';
 
 function ManagerDashboard() {
-  const notifications = [
-    { message: 'Parking lot 1 is full' },
-    { message: 'Parking lot 2 has a new violation' },
-  ];
+  const [notifications, setNotifications] = useState([]);
+  const [parkingLots, setParkingLots] = useState([]);
 
-  const parkingLots = [
-    {
-      id: 1,
-      name: 'Parking Lot 1',
-      occupancyRate: 90,
-      revenue: 5000,
-      violations: 2,
-    }
-  ];
+  useEffect(() => {
+    const fetchManagerDashboardData = async () => {
+      try {
+        const response = await fetch('/dashboard', {
+          // headers: {
+          //   'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          // },
+        });
+        const data = await response.json();
+        setParkingLots(data.parkingLots);
+      } catch (error) {
+        console.error('Error fetching manager dashboard data:', error);
+      }
+    };
+
+    const fetchNotifications = async () => {
+      try {
+        const response = await fetch('/notifications', {
+          // headers: {
+          //   'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          // },
+        });
+        const data = await response.json();
+        setNotifications(data);
+      } catch (error) {
+        console.error('Error fetching notifications:', error);
+      }
+    };
+
+    fetchManagerDashboardData();
+    fetchNotifications();
+  }, []);
 
   return (
     <div className="dashboard">
       <Navbar notifications={notifications} />
-      <div >
+      <div>
         <h2>Parking Lot Dashboard</h2>
         <div className="dashboard-grid">
           {parkingLots.map((lot) => (

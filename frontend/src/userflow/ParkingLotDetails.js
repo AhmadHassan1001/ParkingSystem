@@ -1,31 +1,31 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import dummyImg from '../assets/ParkingLot.png';
-import ReserveDialog from '../userflow/ReserveDialog';
 import './FiltersStyles.css';
-
-const testParkingLot = {
-  id: 1,
-  location: { city: 'New York', street: '5th Avenue', mapLink: 'https://maps.app.goo.gl/vo6MmxpEBaQT9bMC7' },
-  capacity: 3,
-  basicPrice: 20,
-  parkingSpots: [
-    { id: 1, type: 'REGULAR', status: 'AVAILABLE' },
-    { id: 2, type: 'DISABLED', status: 'OCCUPIED' },
-    { id: 3, type: 'EV', status: 'RESERVED' },
-    { id: 4, type: 'REGULAR', status: 'AVAILABLE' },
-    { id: 5, type: 'DISABLED', status: 'OCCUPIED' },
-    { id: 6, type: 'EV', status: 'RESERVED' },
-    { id: 7, type: 'REGULAR', status: 'AVAILABLE' },
-    { id: 8, type: 'DISABLED', status: 'OCCUPIED' },
-    { id: 9, type: 'EV', status: 'RESERVED' },
-  ],
-};
+import ReserveDialog from './ReserveDialog';
 
 function ParkingLotDetails() {
   const { id } = useParams();
-  const [parkingLot] = useState(testParkingLot); // Replace with actual data fetching logic
+  const [parkingLot, setParkingLot] = useState(null);
   const [selectedSpot, setSelectedSpot] = useState(null);
+
+  useEffect(() => {
+    const fetchParkingLotDetails = async () => {
+      try {
+        const response = await fetch(`/parking-lots/${id}`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+        const data = await response.json();
+        setParkingLot(data);
+      } catch (error) {
+        console.error('Error fetching parking lot details:', error);
+      }
+    };
+
+    fetchParkingLotDetails();
+  }, [id]);
 
   const handleReserve = (spotId) => {
     setSelectedSpot(spotId);
@@ -35,14 +35,34 @@ function ParkingLotDetails() {
     setSelectedSpot(null);
   };
 
-  const handleReserveConfirm = (spotId, startTime, endTime, price) => {
-    // Implement reservation logic here
-    alert(`Reserved spot ${spotId} from ${startTime} to ${endTime} for $${price.toFixed(2)}`);
+  const handleReserveConfirm = async (spotId, startTime, endTime, price) => {
+    try {
+      const response = await fetch(`/reserve/${spotId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify({ startTime, endTime }),
+      });
+
+      if (response.ok) {
+        alert(`Reserved spot ${spotId} from ${startTime} to ${endTime} for $${price.toFixed(2)}`);
+      } else {
+        console.error('Reservation failed');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
+
+  if (!parkingLot) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="parking-lot-details">
-      <div class="content">
+      <div className="content">
         <img src={dummyImg} alt={`Parking Lot ${parkingLot.id}`} className="image" />
         <div className="content">
           <div className="header">
@@ -60,8 +80,7 @@ function ParkingLotDetails() {
           {parkingLot.parkingSpots.map((spot) => (
             <li key={spot.id} className={`spot ${spot.status.toLowerCase()}`}>
               <span>Spot {spot.id} - {spot.type} - {spot.status}</span>
-              {/* {spot.status === 'AVAILABLE' && ( */}
-              {spot.status != null && (
+              {spot.status === 'AVAILABLE' && (
                 <button onClick={() => handleReserve(spot.id)} className="reserve-button">Reserve</button>
               )}
             </li>
