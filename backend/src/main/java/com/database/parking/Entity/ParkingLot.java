@@ -14,6 +14,7 @@ import lombok.Setter;
 public class ParkingLot {
     long id;
     long locationId;
+    String parkingLotName;
     int capacity;
     double basicPrice;
     long managerId;

@@ -30,6 +30,7 @@ public class ParkingLotDAO {
                         .capacity(resultSet.getInt("capacity"))
                         .basicPrice(resultSet.getDouble("basic_price"))
                         .managerId(resultSet.getLong("manager_id"))
+                        .parkingLotName(resultSet.getString("name"))
                         .build();
                 parkingLots.add(parkingLot);
             }
@@ -53,6 +54,7 @@ public class ParkingLotDAO {
                         .capacity(resultSet.getInt("capacity"))
                         .basicPrice(resultSet.getDouble("basic_price"))
                         .managerId(resultSet.getLong("manager_id"))
+                        .parkingLotName(resultSet.getString("name"))
                         .build();
             }
         } catch (SQLException e) {
@@ -63,12 +65,13 @@ public class ParkingLotDAO {
 
     public void save(ParkingLot parkingLot) {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            String query = "INSERT INTO parking_lot (location_id, capacity, basic_price, manager_id) VALUES (?, ?, ?, ?)";
+            String query = "INSERT INTO parking_lot (location_id, capacity, basic_price, manager_id, name) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             statement.setLong(1, parkingLot.getLocationId());
             statement.setInt(2, parkingLot.getCapacity());
             statement.setDouble(3, parkingLot.getBasicPrice());
             statement.setLong(4, parkingLot.getManagerId());
+            statement.setString(5, parkingLot.getParkingLotName());
             statement.executeUpdate();
             ResultSet resultSet = statement.getGeneratedKeys();
             if (resultSet.next()) {
@@ -81,13 +84,14 @@ public class ParkingLotDAO {
 
     public void update(ParkingLot parkingLot) {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            String query = "UPDATE parking_lot SET location_id = ?, capacity = ?, basic_price = ?, manager_id = ? WHERE id = ?";
+            String query = "UPDATE parking_lot SET location_id = ?, capacity = ?, basic_price = ?, manager_id = ?, name = ? WHERE id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setLong(1, parkingLot.getLocationId());
             statement.setInt(2, parkingLot.getCapacity());
             statement.setDouble(3, parkingLot.getBasicPrice());
             statement.setLong(4, parkingLot.getManagerId());
-            statement.setLong(5, parkingLot.getId());
+            statement.setString(5, parkingLot.getParkingLotName());
+            statement.setLong(6, parkingLot.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -105,8 +109,6 @@ public class ParkingLotDAO {
         }
     }
 
-
-
     public static void main(String[] args) {
         ParkingLotDAO parkingLotDAO = new ParkingLotDAO();
         LocationDAO locationDAO = new LocationDAO();
@@ -122,6 +124,7 @@ public class ParkingLotDAO {
                 .locationId(location.getId())
                 .capacity(100)
                 .basicPrice(10.0)
+                .parkingLotName("Main Parking Lot")
                 .build();
         parkingLotDAO.save(parkingLot);
 
@@ -132,9 +135,5 @@ public class ParkingLotDAO {
         // parkingLotDAO.getAll().forEach(System.out::println);
 
         // parkingLotDAO.delete(parkingLot.getId());
-
-        
-    
     }
-
 }

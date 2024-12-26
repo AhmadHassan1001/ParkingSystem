@@ -1,6 +1,6 @@
 package com.database.parking.Controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,31 +12,32 @@ import com.database.parking.Service.UserService;
 import com.database.parking.dto.LoginRequest;
 import com.database.parking.dto.SignupRequestDriver;
 import com.database.parking.dto.SignupRequestParkingLot;
-import com.database.parking.dto.TokenResponse;
 
 @RestController
 @RequestMapping("/auth")
 @CrossOrigin
 public class AuthController {
 
-    @Autowired
-    private UserService userService;
+    private UserService userService = new UserService();
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
-        TokenResponse tokenResponse = userService.login(loginRequest.getName(), loginRequest.getPassword());
-        return ResponseEntity.ok(tokenResponse.getToken());
+        String tokenResponse = userService.login(loginRequest);
+        if (tokenResponse == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+        }
+        return ResponseEntity.ok(tokenResponse);
     }
 
     @PostMapping("/signup/driver")
     public ResponseEntity<String> signupDriver(@RequestBody SignupRequestDriver signupRequestDriver) {
-        TokenResponse tokenResponse = userService.signupDriver(signupRequestDriver);
-        return ResponseEntity.ok(tokenResponse.getToken());
+        String tokenResponse = userService.signupDriver(signupRequestDriver);
+        return ResponseEntity.ok(tokenResponse);
     }
 
     @PostMapping("/signup/parking-lot")
     public ResponseEntity<String> signupParkingLotManager(@RequestBody SignupRequestParkingLot signupRequestParkingLot) {
-        TokenResponse tokenResponse = userService.signupParkingLotManager(signupRequestParkingLot);
-        return ResponseEntity.ok(tokenResponse.getToken());
+        String tokenResponse = userService.signupParkingLotManager(signupRequestParkingLot);
+        return ResponseEntity.ok(tokenResponse);
     }
 }

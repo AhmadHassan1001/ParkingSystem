@@ -13,35 +13,31 @@ import com.database.parking.dao.DriverDAO;
 import com.database.parking.dao.LocationDAO;
 import com.database.parking.dao.ParkingLotDAO;
 import com.database.parking.dao.UserDAO;
+import com.database.parking.dto.LoginRequest;
 import com.database.parking.dto.SignupRequestDriver;
 import com.database.parking.dto.SignupRequestParkingLot;
-import com.database.parking.dto.TokenResponse;
 
 @Service
 public class UserService {
 
     private UserDAO userDAO = new UserDAO();
-
     private DriverDAO driverDAO = new DriverDAO();
-
     private LocationDAO locationDAO = new LocationDAO();
-
     private ParkingLotDAO parkingLotDAO = new ParkingLotDAO();
 
     public void save(User user) {
         userDAO.save(user);
     }
 
-    public TokenResponse login(String name, String password) {
-        User user = userDAO.getByNameAndPassword(name, password);
+    public String login(LoginRequest loginRequest) {
+        User user = userDAO.getByNameAndPassword(loginRequest.getName(), loginRequest.getPassword());
         if (user != null) {
-            // (for simplicity, using id as token)
-            return new TokenResponse(String.valueOf(user.getId()), user.getRole().toString());
+            return String.valueOf(user.getId());
         }
         return null;
     }
 
-    public TokenResponse signupDriver(SignupRequestDriver signupRequestDriver) {
+    public String signupDriver(SignupRequestDriver signupRequestDriver) {
         User user = User.builder()
                 .name(signupRequestDriver.getName())
                 .password(signupRequestDriver.getPassword())
@@ -56,17 +52,17 @@ public class UserService {
                 .paymentMethod(signupRequestDriver.getPaymentMethod())
                 .build();
         driverDAO.save(driver);
-        
+
         // (for simplicity, using id as token)
-        return new TokenResponse(String.valueOf(user.getId()), user.getRole().toString());
+        return String.valueOf(user.getId());
     }
 
-    public TokenResponse signupParkingLotManager(SignupRequestParkingLot signupRequestParkingLot) {
+    public String signupParkingLotManager(SignupRequestParkingLot signupRequestParkingLot) {
         User user = User.builder()
                 .name(signupRequestParkingLot.getName())
                 .password(signupRequestParkingLot.getPassword())
                 .phone(signupRequestParkingLot.getPhone())
-                .role(Role.MANAGEMENT)
+                .role(Role.LOT_MANAGER)
                 .build();
         userDAO.save(user);
 
@@ -77,16 +73,20 @@ public class UserService {
                 .build();
         locationDAO.save(location);
 
+        int capacity = signupRequestParkingLot.getDisabledSlots() +
+                signupRequestParkingLot.getEvSlots() +
+                signupRequestParkingLot.getRegularSlots();
+
         ParkingLot parkingLot = ParkingLot.builder()
                 .locationId(location.getId())
-                .capacity(signupRequestParkingLot.getCapacity())
+                .capacity(capacity)
                 .basicPrice(signupRequestParkingLot.getPrice())
                 .managerId(user.getId())
+                .parkingLotName(signupRequestParkingLot.getParkingLotName())
                 .build();
         parkingLotDAO.save(parkingLot);
 
-        // (for simplicity, using id as token)
-        return new TokenResponse(String.valueOf(user.getId()), user.getRole().toString());
+        return String.valueOf(user.getId());
     }
 
     public void update(User user) {

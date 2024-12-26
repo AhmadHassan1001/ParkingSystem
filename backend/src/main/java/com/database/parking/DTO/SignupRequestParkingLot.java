@@ -14,10 +14,10 @@ public class SignupRequestParkingLot {
     private String name;
     private String password;
     private String phone;
+    private String parkingLotName;
     private String city;
     private String street;
     private String locationLink;
-    private int capacity;
     private double price;
     private int regularSlots;
     private int disabledSlots;

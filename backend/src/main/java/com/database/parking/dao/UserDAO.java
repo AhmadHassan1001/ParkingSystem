@@ -74,7 +74,7 @@ public class UserDAO {
                         .id(resultSet.getLong("id"))
                         .name(resultSet.getString("name"))
                         .phone(resultSet.getString("phone"))
-                        .role(Role.valueOf(resultSet.getString("role")))
+                        .role(Role.valueOf(resultSet.getString("role").toUpperCase()))
                         .password(resultSet.getString("password"))
                         .build();
             }
