@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.database.parking.Entity.Driver;
+import com.database.parking.Entity.Location;
+import com.database.parking.Entity.ParkingLot;
 import com.database.parking.Entity.User;
 import com.database.parking.Enums.Role;
 import com.database.parking.dao.DriverDAO;
@@ -12,6 +14,7 @@ import com.database.parking.dao.LocationDAO;
 import com.database.parking.dao.ParkingLotDAO;
 import com.database.parking.dao.UserDAO;
 import com.database.parking.dto.SignupRequestDriver;
+import com.database.parking.dto.SignupRequestParkingLot;
 import com.database.parking.dto.TokenResponse;
 
 @Service
@@ -58,6 +61,34 @@ public class UserService {
         return new TokenResponse(String.valueOf(user.getId()), user.getRole().toString());
     }
 
+    public TokenResponse signupParkingLotManager(SignupRequestParkingLot signupRequestParkingLot) {
+        User user = User.builder()
+                .name(signupRequestParkingLot.getName())
+                .password(signupRequestParkingLot.getPassword())
+                .phone(signupRequestParkingLot.getPhone())
+                .role(Role.MANAGEMENT)
+                .build();
+        userDAO.save(user);
+
+        Location location = Location.builder()
+                .city(signupRequestParkingLot.getCity())
+                .street(signupRequestParkingLot.getStreet())
+                .mapLink(signupRequestParkingLot.getLocationLink())
+                .build();
+        locationDAO.save(location);
+
+        ParkingLot parkingLot = ParkingLot.builder()
+                .locationId(location.getId())
+                .capacity(signupRequestParkingLot.getCapacity())
+                .basicPrice(signupRequestParkingLot.getPrice())
+                .managerId(user.getId())
+                .build();
+        parkingLotDAO.save(parkingLot);
+
+        // (for simplicity, using id as token)
+        return new TokenResponse(String.valueOf(user.getId()), user.getRole().toString());
+    }
+
     public void update(User user) {
         userDAO.update(user);
     }
@@ -73,4 +104,5 @@ public class UserService {
     public List<User> getAll() {
         return userDAO.getAll();
     }
+
 }

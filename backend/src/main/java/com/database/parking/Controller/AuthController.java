@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.database.parking.Service.UserService;
 import com.database.parking.dto.LoginRequest;
 import com.database.parking.dto.SignupRequestDriver;
+import com.database.parking.dto.SignupRequestParkingLot;
 import com.database.parking.dto.TokenResponse;
 
 @RestController
@@ -22,26 +23,20 @@ public class AuthController {
     private UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<TokenResponse> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
         TokenResponse tokenResponse = userService.login(loginRequest.getName(), loginRequest.getPassword());
-        if (tokenResponse != null) {
-            return ResponseEntity.ok(tokenResponse);
-        } else {
-            return ResponseEntity.status(401).build();
-        }
+        return ResponseEntity.ok(tokenResponse.getToken());
     }
 
     @PostMapping("/signup/driver")
     public ResponseEntity<String> signupDriver(@RequestBody SignupRequestDriver signupRequestDriver) {
         TokenResponse tokenResponse = userService.signupDriver(signupRequestDriver);
-        String token = tokenResponse.gettoken();
-        return ResponseEntity.ok(tokenResponse..toString());
+        return ResponseEntity.ok(tokenResponse.getToken());
     }
 
-    // @PostMapping("/signup/parking-lot")
-    // public ResponseEntity<TokenResponse> signupParkingLotManager(@RequestBody SignupRequest signupRequest) {
-    //     signupRequest.setRole(Role.MANAGEMENT);
-    //     TokenResponse tokenResponse = userService.signup(signupRequest);
-    //     return ResponseEntity.ok(tokenResponse);
-    // }
+    @PostMapping("/signup/parking-lot")
+    public ResponseEntity<String> signupParkingLotManager(@RequestBody SignupRequestParkingLot signupRequestParkingLot) {
+        TokenResponse tokenResponse = userService.signupParkingLotManager(signupRequestParkingLot);
+        return ResponseEntity.ok(tokenResponse.getToken());
+    }
 }

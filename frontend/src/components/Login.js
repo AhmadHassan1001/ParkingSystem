@@ -22,7 +22,8 @@ function Login() {
       });
 
       if (response.ok) {
-        const data = await response.json();
+        const data = await response;
+        console.log(data);
         const { token, role } = data;
         localStorage.setItem('token', token);
 
