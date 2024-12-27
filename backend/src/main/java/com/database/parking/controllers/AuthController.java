@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,6 +14,10 @@ import com.database.parking.dto.LoginRequest;
 import com.database.parking.dto.SignupRequestDriver;
 import com.database.parking.dto.SignupRequestParkingLot;
 import com.database.parking.dto.TokenResponse;
+import com.database.parking.models.User;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/auth")
@@ -23,20 +28,27 @@ public class AuthController {
     private UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<TokenResponse> login(@RequestBody LoginRequest loginRequest) {
         TokenResponse tokenResponse = userService.login(loginRequest.getName(), loginRequest.getPassword());
-        return ResponseEntity.ok(tokenResponse.getToken());
+        return ResponseEntity.ok(tokenResponse);
     }
 
+    @GetMapping("/info")
+    public ResponseEntity<User> info(@RequestHeader("Authorization") String token) {
+      String bearerToken = token.substring(7); // Remove "Bearer " prefix
+      User user = userService.getUserFromToken(bearerToken);
+      return ResponseEntity.ok(user);
+    }
+    
     @PostMapping("/signup/driver")
-    public ResponseEntity<String> signupDriver(@RequestBody SignupRequestDriver signupRequestDriver) {
-        TokenResponse tokenResponse = userService.signupDriver(signupRequestDriver);
-        return ResponseEntity.ok(tokenResponse.getToken());
+    public ResponseEntity<User> signupDriver(@RequestBody SignupRequestDriver signupRequestDriver) {
+        User user = userService.signupDriver(signupRequestDriver);
+        return ResponseEntity.ok(user);
     }
 
     @PostMapping("/signup/parking-lot")
-    public ResponseEntity<String> signupParkingLotManager(@RequestBody SignupRequestParkingLot signupRequestParkingLot) {
-        TokenResponse tokenResponse = userService.signupParkingLotManager(signupRequestParkingLot);
-        return ResponseEntity.ok(tokenResponse.getToken());
+    public ResponseEntity<User> signupParkingLotManager(@RequestBody SignupRequestParkingLot signupRequestParkingLot) {
+        User user = userService.signupParkingLotManager(signupRequestParkingLot);
+        return ResponseEntity.ok(user);
     }
 }

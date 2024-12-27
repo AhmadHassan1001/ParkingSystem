@@ -1,8 +1,12 @@
 package com.database.parking.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 
 import com.database.parking.models.Driver;
 import com.database.parking.models.Location;
@@ -24,14 +28,12 @@ import com.database.parking.dto.TokenResponse;
 @Service
 public class UserService {
 
+    private static final String SECRET_KEY = "lbfidughisybndirlg";
+
     private UserDAO userDAO = new UserDAO();
-
     private DriverDAO driverDAO = new DriverDAO();
-
     private LocationDAO locationDAO = new LocationDAO();
-
     private ParkingLotDAO parkingLotDAO = new ParkingLotDAO();
-
     private ParkingSpotDAO parkingSpotDAO = new ParkingSpotDAO();
 
     public void save(User user) {
@@ -41,13 +43,32 @@ public class UserService {
     public TokenResponse login(String name, String password) {
         User user = userDAO.getByNameAndPassword(name, password);
         if (user != null) {
-            // (for simplicity, using id as token)
-            return new TokenResponse(String.valueOf(user.getId()), user.getRole().toString());
+            String jwt = Jwts.builder()
+                    .setSubject(String.valueOf(user.getId()))
+                    .claim("role", user.getRole().toString())
+                    .setIssuedAt(new Date())
+                    .setExpiration(new Date(System.currentTimeMillis() + 86400000)) // 1 day expiration
+                    .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
+                    .compact();
+            return new TokenResponse(jwt);
         }
         return null;
     }
+    
+    public User getUserFromToken(String token) {
+      try {
+        String userId = Jwts.parser()
+            .setSigningKey(SECRET_KEY)
+            .parseClaimsJws(token)
+            .getBody()
+            .getSubject();
+        return userDAO.getById(Long.parseLong(userId));
+      } catch (Exception e) {
+        return null;
+      }
+    }
 
-    public TokenResponse signupDriver(SignupRequestDriver signupRequestDriver) {
+    public User signupDriver(SignupRequestDriver signupRequestDriver) {
         User user = User.builder()
                 .name(signupRequestDriver.getName())
                 .password(signupRequestDriver.getPassword())
@@ -64,10 +85,10 @@ public class UserService {
         driverDAO.save(driver);
         
         // (for simplicity, using id as token)
-        return new TokenResponse(String.valueOf(user.getId()), user.getRole().toString());
+        return user;
     }
 
-    public TokenResponse signupParkingLotManager(SignupRequestParkingLot signupRequestParkingLot) {
+    public User signupParkingLotManager(SignupRequestParkingLot signupRequestParkingLot) {
         User user = User.builder()
                 .name(signupRequestParkingLot.getName())
                 .password(signupRequestParkingLot.getPassword())
@@ -130,7 +151,7 @@ public class UserService {
         }
 
         // (for simplicity, using id as token)
-        return new TokenResponse(String.valueOf(user.getId()), user.getRole().toString());
+        return user;
     }
 
     public void update(User user) {
