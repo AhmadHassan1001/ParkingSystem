@@ -42,7 +42,7 @@ public class ReservationController {
     private ParkingLotDAO parkingLotDAO;
 
 
-    @PostMapping("/{id}/calcuate-cost")
+    @PostMapping("/{id}/calculate-cost")
     public double calculateCost (@PathVariable long parkingSpotId, LocalDateTime startTime, LocalDateTime endTime) {
         if (checkReservationDuration(parkingSpotId, startTime, endTime)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Reservation duration is invalid");
