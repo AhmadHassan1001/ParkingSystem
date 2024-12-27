@@ -32,11 +32,6 @@ function Signup() {
       ...(role === 'MANAGEMENT' && { parkingLotName: name, city, street, locationLink, capacity: regularSlots + disabledSlots + evSlots, price, regularSlots, disabledSlots, evSlots }),
     };
 
-
-
-
-
-
     try {
       const response = role === 'DRIVER' ? await signupDriver(userData) : await signupParkingLot(userData);
 
