@@ -1,6 +1,8 @@
 package com.database.parking.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
 
 import com.database.parking.dao.ParkingSpotDAO;
 import com.database.parking.dao.ReservationDAO;
@@ -34,26 +36,30 @@ public class ParkingSpotController {
 
     @GetMapping("/{id}")
     public ParkingSpotResponse getParkingSpotDetails (@PathVariable long id) {
-        ParkingSpot parkingSpot = parkingSpotDAO.getById(id);
-        List<Reservation> reservations = reservationDAO.getByParkingSpotId(id);
+        try {
+            ParkingSpot parkingSpot = parkingSpotDAO.getById(id);
+            List<Reservation> reservations = reservationDAO.getByParkingSpotId(id);
 
-        // choose reservations info whose status is ACTIVE
-        List<ReservationInfo> reservationsInfo = reservations.stream()
-        .filter(reservation -> reservation.getStatus().equals(ReservationStatus.ACTIVE)).map(reservation -> ReservationInfo.builder()
-            .id(reservation.getId())
-            .startTime(reservation.getStartTime())
-            .endTime(reservation.getEndTime())
-            .build()).toList();
+            // choose reservations info whose status is ACTIVE
+            List<ReservationInfo> reservationsInfo = reservations.stream()
+            .filter(reservation -> reservation.getStatus().equals(ReservationStatus.ACTIVE)).map(reservation -> ReservationInfo.builder()
+                .id(reservation.getId())
+                .startTime(reservation.getStartTime())
+                .endTime(reservation.getEndTime())
+                .build()).toList();
 
-        ParkingSpotResponse parkingSpotResponse = ParkingSpotResponse.builder()
-            .id(parkingSpot.getId())
-            .parkingLotId(parkingSpot.getParkingLotId())
-            .type(parkingSpot.getType())
-            .status(parkingSpot.getStatus())
-            .reservationsInfo(reservationsInfo)
-            .build();
+            ParkingSpotResponse parkingSpotResponse = ParkingSpotResponse.builder()
+                .id(parkingSpot.getId())
+                .parkingLotId(parkingSpot.getParkingLotId())
+                .type(parkingSpot.getType())
+                .status(parkingSpot.getStatus())
+                .reservationsInfo(reservationsInfo)
+                .build();
 
-        return parkingSpotResponse;
+            return parkingSpotResponse;
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error");
+        }
     }
 
 }

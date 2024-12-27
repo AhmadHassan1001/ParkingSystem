@@ -19,9 +19,9 @@ public class ReservationDAO {
     private final String username = "admin";
     private final String password = "admin";
 
-    public List<Reservation> getAll() {
+    public List<Reservation> getAll() throws SQLException {
         List<Reservation> reservations = new ArrayList<>();
-        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+            Connection connection = DriverManager.getConnection(url, username, password);
             String query = "SELECT * FROM reservation";
             PreparedStatement statement = connection.prepareStatement(query);
             ResultSet resultSet = statement.executeQuery();
@@ -38,15 +38,12 @@ public class ReservationDAO {
                         .build();
                 reservations.add(reservation);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
         return reservations;
     }
 
-    public Reservation getById(long id) {
+    public Reservation getById(long id) throws SQLException {
         Reservation reservation = null;
-        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+            Connection connection = DriverManager.getConnection(url, username, password);
             String query = "SELECT * FROM reservation WHERE id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setLong(1, id);
@@ -63,15 +60,12 @@ public class ReservationDAO {
                         .isPaid(resultSet.getBoolean("is_paid"))
                         .build();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
         return reservation;
     }
 
-    public List<Reservation> getByUserId(long userId) {
+    public List<Reservation> getByUserId(long userId) throws SQLException {
         List<Reservation> reservations = new ArrayList<>();
-        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+            Connection connection = DriverManager.getConnection(url, username, password);
             String query = "SELECT * FROM reservation WHERE user_id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setLong(1, userId);
@@ -89,15 +83,12 @@ public class ReservationDAO {
                         .build();
                 reservations.add(reservation);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
         return reservations;
     }
 
-    public List<Reservation> getByParkingSpotId(long parkingSpotId) {
+    public List<Reservation> getByParkingSpotId(long parkingSpotId) throws SQLException {
         List<Reservation> reservations = new ArrayList<>();
-        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+            Connection connection = DriverManager.getConnection(url, username, password);
             String query = "SELECT * FROM reservation WHERE parking_spot_id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setLong(1, parkingSpotId);
@@ -115,14 +106,11 @@ public class ReservationDAO {
                         .build();
                 reservations.add(reservation);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
         return reservations;
     }
 
-    public void save(Reservation reservation) {
-        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+    public void save(Reservation reservation) throws SQLException {
+            Connection connection = DriverManager.getConnection(url, username, password);
             String query = "INSERT INTO reservation (user_id, parking_spot_id, start_time, end_time, cost, status, is_paid) VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             statement.setLong(1, reservation.getUserId());
@@ -138,13 +126,10 @@ public class ReservationDAO {
             if (resultSet.next()) {
                 reservation.setId(resultSet.getLong(1));
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
-    public void update(Reservation reservation) {
-        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+    public void update(Reservation reservation) throws SQLException {
+            Connection connection = DriverManager.getConnection(url, username, password);
             String query = "UPDATE reservation SET user_id = ?, parking_spot_id = ?, start_time = ?, end_time = ?, cost = ?, status = ?, is_paid = ? WHERE id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setLong(1, reservation.getUserId());
@@ -156,51 +141,45 @@ public class ReservationDAO {
             statement.setBoolean(7, reservation.isPaid());
             statement.setLong(8, reservation.getId());
             statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
-    public void delete(long id) {
-        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+    public void delete(long id) throws SQLException {
+            Connection connection = DriverManager.getConnection(url, username, password);
             String query = "DELETE FROM reservation WHERE id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setLong(1, id);
             statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
     
     public static void main (String[] args) {
-        ReservationDAO reservationDAO = new ReservationDAO();
+        // ReservationDAO reservationDAO = new ReservationDAO();
 
-        Reservation reservation1 = Reservation.builder()
-                .userId(1)
-                .parkingSpotId(1)
-                .startTime(java.time.LocalDateTime.now())
-                .endTime(java.time.LocalDateTime.now().plusHours(2))
-                .cost(10.0)
-                .status(ReservationStatus.ACTIVE)
-                .isPaid(false)
-                .build();
+        // Reservation reservation1 = Reservation.builder()
+        //         .userId(1)
+        //         .parkingSpotId(1)
+        //         .startTime(java.time.LocalDateTime.now())
+        //         .endTime(java.time.LocalDateTime.now().plusHours(2))
+        //         .cost(10.0)
+        //         .status(ReservationStatus.ACTIVE)
+        //         .isPaid(false)
+        //         .build();
 
-        reservationDAO.save(reservation1);
+        // reservationDAO.save(reservation1);
 
-        // Reservation reservation2 = reservationDAO.getById(4);
-        // reservation2.setCost(20.0);
-        // reservationDAO.update(reservation2);
+        // // Reservation reservation2 = reservationDAO.getById(4);
+        // // reservation2.setCost(20.0);
+        // // reservationDAO.update(reservation2);
 
-        reservationDAO.delete(4);
+        // reservationDAO.delete(4);
         
         
 
 
-        List<Reservation> reservations = reservationDAO.getAll();
-        for (Reservation reservation : reservations) {
-            System.out.println(reservation);
-        }
+        // List<Reservation> reservations = reservationDAO.getAll();
+        // for (Reservation reservation : reservations) {
+        //     System.out.println(reservation);
+        // }
     }
 
 }
