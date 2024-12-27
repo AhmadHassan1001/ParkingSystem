@@ -16,7 +16,7 @@ import com.database.parking.dto.TokenResponse;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:3000")
 public class AuthController {
 
     @Autowired

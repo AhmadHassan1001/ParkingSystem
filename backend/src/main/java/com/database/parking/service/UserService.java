@@ -66,7 +66,7 @@ public class UserService {
                 .name(signupRequestParkingLot.getName())
                 .password(signupRequestParkingLot.getPassword())
                 .phone(signupRequestParkingLot.getPhone())
-                .role(Role.MANAGEMENT)
+                .role(Role.LOT_MANAGER)
                 .build();
         userDAO.save(user);
 
@@ -78,6 +78,7 @@ public class UserService {
         locationDAO.save(location);
 
         ParkingLot parkingLot = ParkingLot.builder()
+                .name(signupRequestParkingLot.getParkingLotName())
                 .locationId(location.getId())
                 .capacity(signupRequestParkingLot.getCapacity())
                 .basicPrice(signupRequestParkingLot.getPrice())

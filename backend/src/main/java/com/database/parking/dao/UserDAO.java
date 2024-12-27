@@ -1,5 +1,8 @@
 package com.database.parking.dao;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -18,12 +21,12 @@ import com.database.parking.models.User;
 
 public class UserDAO {
     private final String url = "jdbc:mysql://localhost:3306/parking_management_system";
-    private final String username = "admin";
-    private final String password = "admin";
+    private final String dbUserName = "admin";
+    private final String dbPassword = "admin";
     
     public List<User> getAll() {
         List<User> users = new ArrayList<>();
-        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+        try (Connection connection = DriverManager.getConnection(url, dbUserName, dbPassword)) {
             String query = "SELECT * FROM user";
             PreparedStatement statement = connection.prepareStatement(query);
             ResultSet resultSet = statement.executeQuery();
@@ -45,7 +48,7 @@ public class UserDAO {
 
     public User getById(long id) {
         User user = null;
-        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+        try (Connection connection = DriverManager.getConnection(url, dbUserName, dbPassword)) {
             String query = "SELECT * FROM user WHERE id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setLong(1, id);
@@ -67,19 +70,20 @@ public class UserDAO {
     
     public User getByNameAndPassword(String name, String password) {
         User user = null;
-        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+        try (Connection connection = DriverManager.getConnection(url, dbUserName, dbPassword)) {
             String query = "SELECT * FROM user WHERE name = ? AND password = ?";
+            String hashedPassword = User.hashPassword(password);
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, name);
-            statement.setString(2, password);
+            statement.setString(2, hashedPassword);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 user = User.builder()
                         .id(resultSet.getLong("id"))
                         .name(resultSet.getString("name"))
                         .phone(resultSet.getString("phone"))
-                        .role(Role.valueOf(resultSet.getString("role")))
-                        .password(resultSet.getString("password"))
+                        .role(Role.valueOf(resultSet.getString("role").toUpperCase()))
+                        .password(password)
                         .build();
             }
         } catch (SQLException e) {
@@ -89,7 +93,7 @@ public class UserDAO {
     }
 
     public void save(User user) {
-        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+        try (Connection connection = DriverManager.getConnection(url, dbUserName, dbPassword)) {
             String query = "INSERT INTO user (name, phone, role, password) VALUES (?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, user.getName());
@@ -109,7 +113,7 @@ public class UserDAO {
     }
 
     public void update(User user) {
-        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+        try (Connection connection = DriverManager.getConnection(url, dbUserName, dbPassword)) {
             String query = "UPDATE user SET name = ?, phone = ?, role = ?, password = ? WHERE id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, user.getName());
@@ -125,7 +129,7 @@ public class UserDAO {
     
 
     public void delete(long id) {
-        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+        try (Connection connection = DriverManager.getConnection(url, dbUserName, dbPassword)) {
             String query = "DELETE FROM user WHERE id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setLong(1, id);

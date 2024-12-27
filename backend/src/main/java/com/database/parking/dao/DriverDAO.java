@@ -61,16 +61,18 @@ public class DriverDAO {
     }
 
     public void save(Driver driver) {
-        try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            String sql = "INSERT INTO driver (user_id, license_plate_number, payment_method) VALUES (?, ?, ?)";
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setLong(1, driver.getUserId());
-            statement.setString(2   , driver.getLicensePlateNumber());
-            statement.setString(3, driver.getPaymentMethod().name());
-            statement.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+      try (Connection connection = DriverManager.getConnection(url, username, password)) {
+        String sql = "INSERT INTO driver (user_id, license_plate_number, payment_method) VALUES (?, ?, ?)";
+        System.out.println("Payment Method: ");
+        System.out.println(driver.getPaymentMethod());
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setLong(1, driver.getUserId());
+        statement.setString(2, driver.getLicensePlateNumber());
+        statement.setString(3, driver.getPaymentMethod().name());
+        statement.executeUpdate();
+      } catch (Exception e) {
+        throw new RuntimeException(e);
+      }
     }
 
     public void update(Driver driver) {

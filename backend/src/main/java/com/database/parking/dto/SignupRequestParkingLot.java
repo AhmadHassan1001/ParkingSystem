@@ -14,6 +14,8 @@ public class SignupRequestParkingLot {
     private String name;
     private String password;
     private String phone;
+    
+    private String parkingLotName;
     private String city;
     private String street;
     private String locationLink;
