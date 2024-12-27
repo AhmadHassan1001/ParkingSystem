@@ -16,7 +16,7 @@ import com.database.parking.dao.LocationDAO;
 
 
 @RestController
-@RequestMapping("/location")
+@RequestMapping("/locations")
 @CrossOrigin
 public class LocationController {
     
