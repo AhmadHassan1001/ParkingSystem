@@ -8,30 +8,7 @@ import { useNavigate } from 'react-router-dom';
 
 function ParkingLotDetails() {
   const { id } = useParams();
-  const [parkingLot, setParkingLot] = useState({
-    location: {
-      city: 'City',
-      street: 'Street',
-      mapLink: 'https://www.google.com/maps',
-    },
-    parkingSpots: [
-      {
-        id: 1,
-        type: 'REGULAR',
-        status: 'AVAILABLE',
-      },
-      {
-        id: 2,
-        type: 'DISABLED',
-        status: 'RESERVED',
-      },
-      {
-        id: 3,
-        type: 'EV',
-        status: 'OCCUPIED',
-      },
-    ],
-  });
+  const [parkingLot, setParkingLot] = useState(null);
   const [selectedSpot, setSelectedSpot] = useState(null);
   const navigate = useNavigate();
 
