@@ -1,6 +1,9 @@
 package com.database.parking.dto;
 
+import java.util.List;
+
 import com.database.parking.models.Location;
+import com.database.parking.models.ParkingSpot;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,4 +23,5 @@ public class ParkingLotResponse {
     long managerId;
     int capacity;
     double basicPrice;
+    List<ParkingSpot> parkingSpots;
 }

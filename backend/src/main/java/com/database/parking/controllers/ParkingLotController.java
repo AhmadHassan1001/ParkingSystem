@@ -8,11 +8,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.database.parking.dao.LocationDAO;
 import com.database.parking.models.ParkingLot;
+import com.database.parking.models.ParkingSpot;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.database.parking.dao.ParkingLotDAO;
+import com.database.parking.dao.ParkingSpotDAO;
 import com.database.parking.dto.ParkingLotResponse;
 
 
@@ -26,10 +28,14 @@ public class ParkingLotController {
 
     @Autowired
     private LocationDAO LocationDAO;
+
+    @Autowired
+    private ParkingSpotDAO ParkingSpotDAO;
     
     @GetMapping
     public List<ParkingLotResponse> getParkingLots() {
         List<ParkingLot> parkingLots = ParkingLotDAO.getAll();
+        List<ParkingSpot> parkingSpots = ParkingSpotDAO.getAll();
         List<ParkingLotResponse> parkingLotResponses = parkingLots.stream().map(parkingLot -> ParkingLotResponse.builder()
             .id(parkingLot.getId())
             .name(parkingLot.getName())
@@ -37,6 +43,7 @@ public class ParkingLotController {
             .managerId(parkingLot.getManagerId())
             .capacity(parkingLot.getCapacity())
             .basicPrice(parkingLot.getBasicPrice())
+            .parkingSpots(parkingSpots.stream().filter(parkingSpot -> parkingSpot.getParkingLotId() == parkingLot.getId()).toList())
             .build()).toList();
 
         return parkingLotResponses;
@@ -45,6 +52,7 @@ public class ParkingLotController {
     @GetMapping("/{id}")
     public ParkingLotResponse getParkingLotById (@PathVariable long id) {
         ParkingLot parkingLot = ParkingLotDAO.getById(id);
+        List<ParkingSpot> parkingSpots = ParkingSpotDAO.getByParkingLotId(id);
         ParkingLotResponse parkingLotResponse = ParkingLotResponse.builder()
             .id(parkingLot.getId())
             .name(parkingLot.getName())
@@ -52,6 +60,7 @@ public class ParkingLotController {
             .managerId(parkingLot.getManagerId())
             .capacity(parkingLot.getCapacity())
             .basicPrice(parkingLot.getBasicPrice())
+            .parkingSpots(parkingSpots)
             .build();
 
         return parkingLotResponse;
