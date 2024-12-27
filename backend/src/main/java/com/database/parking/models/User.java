@@ -1,23 +1,23 @@
 package com.database.parking.models;
 
-import com.database.parking.orm.Model;
+import com.database.parking.enums.Role;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
-@Setter
 @Getter
-public class User extends Model {
-    public Long id;
-    public String username;
-    public String password;
-    public String email;
-
-    public User() {
-        super();
-    }
-    
-  
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class User{
+    long id;
+    String name;
+    String phone;
+    Role role;
+    String password;
 }

@@ -1,4 +1,6 @@
-package com.database.parking.Entity;
+package com.database.parking.models;
+
+import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,9 +13,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ParkingLot{
+public class Notification {
     long id;
-    long locationId;
-    int capacity;
-    double basicPrice;
+    long userId;
+    String bodyText;
+    LocalDateTime date;
 }

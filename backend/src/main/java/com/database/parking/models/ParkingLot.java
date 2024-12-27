@@ -1,4 +1,5 @@
-package com.database.parking.Entity;
+package com.database.parking.models;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,14 +8,15 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Builder
-@Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
 @Setter
-public class Penalty {
+public class ParkingLot {
     long id;
-    long userId;
-    long parkingLotId;
-    String description;
-    double amount;
+    String name;
+    long locationId;
+    long managerId;
+    int capacity;
+    double basicPrice;
 }

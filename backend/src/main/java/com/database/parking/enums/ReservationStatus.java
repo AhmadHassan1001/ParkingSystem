@@ -1,4 +1,4 @@
-package com.database.parking.Enums;
+package com.database.parking.enums;
 
 public enum ReservationStatus {
     COMPLETE,

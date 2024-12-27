@@ -1,6 +1,6 @@
-package com.database.parking.Entity;
+package com.database.parking.models;
 
-import com.database.parking.Enums.PaymentMethod;
+import com.database.parking.enums.PaymentMethod;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

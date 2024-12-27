@@ -10,9 +10,9 @@ function ManagerDashboard() {
     const fetchManagerDashboardData = async () => {
       try {
         const response = await fetch('/dashboard', {
-          // headers: {
-          //   'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          // },
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          },
         });
         const data = await response.json();
         setParkingLots(data.parkingLots);
@@ -24,9 +24,9 @@ function ManagerDashboard() {
     const fetchNotifications = async () => {
       try {
         const response = await fetch('/notifications', {
-          // headers: {
-          //   'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          // },
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          },
         });
         const data = await response.json();
         setNotifications(data);

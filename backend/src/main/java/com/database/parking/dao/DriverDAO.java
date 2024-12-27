@@ -7,11 +7,14 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.database.parking.Entity.Driver;
-import com.database.parking.Entity.User;
-import com.database.parking.Enums.PaymentMethod;
-import com.database.parking.Enums.Role;
+import org.springframework.stereotype.Repository;
 
+import com.database.parking.enums.PaymentMethod;
+import com.database.parking.enums.Role;
+import com.database.parking.models.Driver;
+import com.database.parking.models.User;
+
+@Repository
 public class DriverDAO {
     private static final String url = "jdbc:mysql://localhost:3306/parking_management_system";
     private static final String username = "admin";

@@ -11,7 +11,6 @@ function Signup() {
   const [city, setCity] = useState('');
   const [street, setStreet] = useState('');
   const [locationLink, setLocationLink] = useState('');
-  const [capacity, setCapacity] = useState('');
   const [price, setPrice] = useState('');
   const [regularSlots, setRegularSlots] = useState('');
   const [disabledSlots, setDisabledSlots] = useState('');
@@ -22,7 +21,7 @@ function Signup() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const url = role === 'DRIVER' ? '/signup/driver' : '/signup/parking-lot';
+    const url = role === 'DRIVER' ? 'http://localhost:8080/auth/signup/driver' : 'http://localhost:8080/auth/signup/parking-lot';
 
     const userData = {
       name,
@@ -37,7 +36,6 @@ function Signup() {
             street,
             locationLink,
           },
-          capacity,
           price,
           slots: {
             REGULAR: regularSlots,
@@ -58,9 +56,12 @@ function Signup() {
       });
 
       if (response.ok) {
-        const data = await response.json();
-        const { token } = data;
-        localStorage.setItem('token', token);
+        const data = await response;
+        console.log(data);
+        // const { token } = data;
+        // localStorage.setItem('token', token);
+        console.log('Signup successful');
+        console.log(localStorage.getItem('token'));
 
         // Redirect based on user role
         if (role === 'DRIVER') {
@@ -141,7 +142,7 @@ function Signup() {
                   onChange={(e) => setPaymentMethod(e.target.value)}
                 >
                   <option value="CASH">CASH</option>
-                  <option value="VISA">VISA</option>
+                  <option value="CREDIT_CARD">VISA</option>
                 </select>
               </div>
             </>
@@ -172,16 +173,7 @@ function Signup() {
                   onChange={(e) => setLocationLink(e.target.value)}
                 />
               </div>
-              <div className="form-group">
-                <label>Capacity:</label>
-                <input
-                  type="number"
-                  name="capacity"
-                  value={capacity}
-                  onChange={(e) => setCapacity(e.target.value)}
-                />
-              </div>
-              <label>Slot Types:</label>
+              <label>Slots Types:</label>
               <div className="form-group inline">
                 <input
                   type="number"

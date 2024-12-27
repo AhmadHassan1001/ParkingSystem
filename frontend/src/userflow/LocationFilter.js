@@ -1,25 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import './FiltersStyles.css';
+import { locationList } from '../api';
 
 function LocationFilter({ location, onChange }) {
   const [cities, setCities] = useState([]);
 
   useEffect(() => {
-    const fetchLocations = async () => {
-      try {
-        const response = await fetch('/locations', {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          },
-        });
-        const data = await response.json();
-        setCities(data);
-      } catch (error) {
-        console.error('Error fetching locations:', error);
-      }
-    };
-
-    fetchLocations();
+    locationList().then((data) => {
+      setCities(data.map((location) => location.city));
+    });
   }, []);
 
   return (

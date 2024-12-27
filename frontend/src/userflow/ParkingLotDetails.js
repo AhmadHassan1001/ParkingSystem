@@ -3,28 +3,20 @@ import { useParams } from 'react-router-dom';
 import dummyImg from '../assets/ParkingLot.png';
 import './FiltersStyles.css';
 import ReserveDialog from './ReserveDialog';
+import { parkingLotDetails, reserveSpot } from '../api';
+import { useNavigate } from 'react-router-dom';
 
 function ParkingLotDetails() {
   const { id } = useParams();
   const [parkingLot, setParkingLot] = useState(null);
   const [selectedSpot, setSelectedSpot] = useState(null);
+  const navigate = useNavigate();
 
+  
   useEffect(() => {
-    const fetchParkingLotDetails = async () => {
-      try {
-        const response = await fetch(`/parking-lots/${id}`, {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          },
-        });
-        const data = await response.json();
-        setParkingLot(data);
-      } catch (error) {
-        console.error('Error fetching parking lot details:', error);
-      }
-    };
-
-    fetchParkingLotDetails();
+    parkingLotDetails(id).then((data) => {
+      setParkingLot(data);
+    });
   }, [id]);
 
   const handleReserve = (spotId) => {
@@ -35,25 +27,11 @@ function ParkingLotDetails() {
     setSelectedSpot(null);
   };
 
-  const handleReserveConfirm = async (spotId, startTime, endTime, price) => {
-    try {
-      const response = await fetch(`/reserve/${spotId}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify({ startTime, endTime }),
-      });
-
-      if (response.ok) {
-        alert(`Reserved spot ${spotId} from ${startTime} to ${endTime} for $${price.toFixed(2)}`);
-      } else {
-        console.error('Reservation failed');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
+  const handleReserveConfirm = async (startTime, endTime) => {
+    reserveSpot(id, startTime, endTime).then((data) => {
+      alert(`Reserved spot ${id} from ${startTime} to ${endTime} for $${data.cost.toFixed(2)}`);
+      setSelectedSpot(null);
+    });
   };
 
   if (!parkingLot) {
@@ -83,6 +61,7 @@ function ParkingLotDetails() {
               {spot.status === 'AVAILABLE' && (
                 <button onClick={() => handleReserve(spot.id)} className="reserve-button">Reserve</button>
               )}
+                <button className="spot-details" onClick={() => navigate(`/parking-spots/${spot.id}`)}>Details</button>
             </li>
           ))}
         </ul>
