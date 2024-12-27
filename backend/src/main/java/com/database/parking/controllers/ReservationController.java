@@ -6,16 +6,14 @@ import org.springframework.web.server.ResponseStatusException;
 import com.database.parking.dao.ParkingLotDAO;
 import com.database.parking.dao.ParkingSpotDAO;
 import com.database.parking.dao.ReservationDAO;
-import com.database.parking.dto.ReservationInfo;
+import com.database.parking.dto.ReservationRequest;
 import com.database.parking.enums.ReservationStatus;
 import com.database.parking.models.Reservation;
 
-import ch.qos.logback.core.status.Status;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,8 +40,10 @@ public class ReservationController {
     private ParkingLotDAO parkingLotDAO;
 
 
-    @PostMapping("/{id}/calcuate-cost")
-    public double calculateCost (@PathVariable long parkingSpotId, LocalDateTime startTime, LocalDateTime endTime) {
+    @PostMapping("/{parkingSpotId}/calculate-cost")
+    public double calculateCost (@PathVariable long parkingSpotId, @RequestBody ReservationRequest reservationRequest) {
+        LocalDateTime startTime = reservationRequest.getStartTime();
+        LocalDateTime endTime = reservationRequest.getEndTime();
         if (checkReservationDuration(parkingSpotId, startTime, endTime)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Reservation duration is invalid");
         }
@@ -53,8 +53,10 @@ public class ReservationController {
         return cost;
     }
     
-    @PostMapping("/{id}/reserve")
-    public ResponseEntity<Reservation> reserve (@PathVariable long parkingSpotId, LocalDateTime startTime, LocalDateTime endTime) {
+    @PostMapping("/{parkingSpotId}/reserve")
+    public ResponseEntity<Reservation> reserve (@PathVariable long parkingSpotId, @RequestBody ReservationRequest reservationRequest) {
+        LocalDateTime startTime = reservationRequest.getStartTime();
+        LocalDateTime endTime = reservationRequest.getEndTime();
         if (checkReservationDuration(parkingSpotId, startTime, endTime)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Reservation duration is invalid");
         }
@@ -66,7 +68,7 @@ public class ReservationController {
             .startTime(startTime)
             .endTime(endTime)
             .status(ReservationStatus.ACTIVE)
-            .cost(calculateCost(parkingSpotId, startTime, endTime))
+            .cost(calculateCost(parkingSpotId, reservationRequest))
             .isPaid(false)
             .build();
         reservationDAO.save(reservation);
