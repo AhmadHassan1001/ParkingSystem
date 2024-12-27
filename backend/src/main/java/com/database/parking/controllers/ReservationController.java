@@ -71,25 +71,32 @@ public class ReservationController {
             .cost(calculateCost(parkingSpotId, reservationRequest))
             .isPaid(false)
             .build();
-        reservationDAO.save(reservation);
+        try {
+            reservationDAO.save(reservation);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Reservation could not be saved");
+        }
 
         return new ResponseEntity<>(reservation, HttpStatus.CREATED);
     }
 
 
     boolean checkReservationDuration (long parkingSpotId, LocalDateTime startTime, LocalDateTime endTime) {
-        List<Reservation> reservations = reservationDAO.getByParkingSpotId(parkingSpotId);
-        for (Reservation reservation : reservations) {
-            if (reservation.getStatus().equals(ReservationStatus.ACTIVE)) {
-                LocalDateTime reservationStartTime = reservation.getStartTime();
-                LocalDateTime reservationEndTime = reservation.getEndTime();
-                if (startTime.isBefore(reservationEndTime) && endTime.isAfter(reservationStartTime)) {
-                    return false;
+        try {
+            List<Reservation> reservations = reservationDAO.getByParkingSpotId(parkingSpotId);
+            for (Reservation reservation : reservations) {
+                if (reservation.getStatus().equals(ReservationStatus.ACTIVE)) {
+                    LocalDateTime reservationStartTime = reservation.getStartTime();
+                    LocalDateTime reservationEndTime = reservation.getEndTime();
+                    if (startTime.isBefore(reservationEndTime) && endTime.isAfter(reservationStartTime)) {
+                        return false;
+                    }
                 }
             }
+            return true;
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error");
         }
-
-        return true;
     }
 
 }
