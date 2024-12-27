@@ -29,3 +29,10 @@ export const updateParkingLot = async (id, parkingLot) => {
   const response = await client.put(`/parking-lots/${id}`, parkingLot);
   return response.data;
 }
+
+
+// Locations
+export const locationList = async () => {
+  const response = await client.get("/locations");
+  return response.data;
+}
