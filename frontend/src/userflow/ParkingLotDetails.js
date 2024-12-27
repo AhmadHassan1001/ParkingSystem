@@ -29,7 +29,7 @@ function ParkingLotDetails() {
 
   const handleReserveConfirm = async (startTime, endTime) => {
     reserveSpot(id, startTime, endTime).then((data) => {
-      alert(`Reserved spot ${id} from ${startTime} to ${endTime} for $${data.price.toFixed(2)}`);
+      alert(`Reserved spot ${id} from ${startTime} to ${endTime} for $${data.cost.toFixed(2)}`);
       setSelectedSpot(null);
     });
   };

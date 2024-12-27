@@ -10,7 +10,7 @@ function ReserveDialog({ spotId, basicPrice, onClose, onReserve }) {
 
   const getPrice = async () => {
     calculatePrice(spotId, startTime, endTime).then((data) => {
-      setPrice(data.price);
+      setPrice(data);
       setAvailability(true);
     });
   };
