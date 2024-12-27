@@ -3,13 +3,57 @@ import Navbar from '../components/Navbar';
 import Filters from './Filters';
 import './FiltersStyles.css';
 import ParkingLotGrid from './ParkingLotGrid';
+import { parkingLotList } from '../api';
 
 function SearchScreen() {
   const [filters, setFilters] = useState({
     location: 'New York',
   });
   const [loading, setLoading] = useState(false);
-  const [parkingLots, setParkingLots] = useState([]);
+  const [parkingLots, setParkingLots] = useState([
+    {
+      id: 1,
+      location: {
+        city: 'New York',
+        street: 'Street 1',
+        mapLink: 'https://www.google.com/maps',
+      },
+      basicPrice: 10,
+      slots: {
+        REGULAR: 10,
+        DISABLED: 2,
+        EV: 1,
+      },
+    },
+    {
+      id: 2,
+      location: {
+        city: 'New York',
+        street: 'Street 2',
+        mapLink: 'https://www.google.com/maps',
+      },
+      basicPrice: 15,
+      slots: {
+        REGULAR: 5,
+        DISABLED: 1,
+        EV: 0,
+      },
+    },
+    {
+      id: 3,
+      location: {
+        city: 'Los Angeles',
+        street: 'Street 3',
+        mapLink: 'https://www.google.com/maps',
+      },
+      basicPrice: 20,
+      slots: {
+        REGULAR: 8,
+        DISABLED: 0,
+        EV: 3,
+      },
+    },
+  ]);
 
   const notifications = [
     { message: 'Parking lot 1 is full' },
@@ -17,24 +61,11 @@ function SearchScreen() {
   ];
 
   useEffect(() => {
-    const fetchParkingLots = async () => {
-      setLoading(true);
-      try {
-        const response = await fetch('/parking-lots', {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          },
-        });
-        const data = await response.json();
-        setParkingLots(data);
-      } catch (error) {
-        console.error('Error fetching parking lots:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    // parkingLotList().then((data) => {
+    //   setParkingLots(data);
+    //   setLoading(false);
+    // });
 
-    fetchParkingLots();
   }, []);
 
   const filteredParkingLots = parkingLots.filter(

@@ -36,7 +36,6 @@ function Signup() {
             street,
             locationLink,
           },
-          capacity,
           price,
           slots: {
             REGULAR: regularSlots,
