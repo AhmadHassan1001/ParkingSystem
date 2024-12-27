@@ -6,12 +6,14 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.database.parking.dao.LocationDAO;
 import com.database.parking.models.ParkingLot;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.database.parking.dao.ParkingLotDAO;
+import com.database.parking.dto.ParkingLotResponse;
 
 
 @RestController
@@ -21,6 +23,9 @@ public class ParkingLotController {
 
     @Autowired
     private ParkingLotDAO ParkingLotDAO;
+
+    @Autowired
+    private LocationDAO LocationDAO;
     
     @GetMapping
     public List<ParkingLot> getParkingLots() {
@@ -28,8 +33,18 @@ public class ParkingLotController {
     }
 
     @GetMapping("/{id}")
-    public ParkingLot getParkingLotById (@PathVariable long id) {
-        return ParkingLotDAO.getById(id);
+    public ParkingLotResponse getParkingLotById (@PathVariable long id) {
+        ParkingLot parkingLot = ParkingLotDAO.getById(id);
+        ParkingLotResponse parkingLotResponse = ParkingLotResponse.builder()
+            .id(parkingLot.getId())
+            .name(parkingLot.getName())
+            .location(LocationDAO.getById(parkingLot.getLocationId()))
+            .managerId(parkingLot.getManagerId())
+            .capacity(parkingLot.getCapacity())
+            .basicPrice(parkingLot.getBasicPrice())
+            .build();
+
+        return parkingLotResponse;
     }
 
 
