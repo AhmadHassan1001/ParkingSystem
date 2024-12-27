@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.database.parking.enums.SpotStatus;
 import com.database.parking.enums.SpotType;
-import com.database.parking.models.Reservation;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

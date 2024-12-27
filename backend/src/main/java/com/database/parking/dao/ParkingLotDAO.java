@@ -19,6 +19,12 @@ public class ParkingLotDAO {
     private final String username = "admin";
     private final String password = "admin";
 
+
+    public Double getDynamicprice (long id) {
+        // TODO: Implement this method
+        return 1.0;
+    }
+
     public List<ParkingLot> getAll() {
         List<ParkingLot> parkingLots = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
