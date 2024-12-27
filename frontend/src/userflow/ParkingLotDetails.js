@@ -3,52 +3,20 @@ import { useParams } from 'react-router-dom';
 import dummyImg from '../assets/ParkingLot.png';
 import './FiltersStyles.css';
 import ReserveDialog from './ReserveDialog';
+import { parkingLotDetails } from '../api';
+import { useNavigate } from 'react-router-dom';
 
 function ParkingLotDetails() {
   const { id } = useParams();
-  const [parkingLot, setParkingLot] = useState({
-    location: {
-      city: 'City',
-      street: 'Street',
-      mapLink: 'https://www.google.com/maps',
-    },
-    parkingSpots: [
-      {
-        id: 1,
-        type: 'REGULAR',
-        status: 'AVAILABLE',
-      },
-      {
-        id: 2,
-        type: 'DISABLED',
-        status: 'RESERVED',
-      },
-      {
-        id: 3,
-        type: 'EV',
-        status: 'OCCUPIED',
-      },
-    ],
-  });
+  const [parkingLot, setParkingLot] = useState(null);
   const [selectedSpot, setSelectedSpot] = useState(null);
+  const navigate = useNavigate();
 
   
   useEffect(() => {
-    const fetchParkingLotDetails = async () => {
-      try {
-        const response = await fetch(`/parking-lots/${id}`, {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          },
-        });
-        const data = await response.json();
-        setParkingLot(data);
-      } catch (error) {
-        console.error('Error fetching parking lot details:', error);
-      }
-    };
-
-    fetchParkingLotDetails();
+    parkingLotDetails(id).then((data) => {
+      setParkingLot(data);
+    });
   }, [id]);
 
   const handleReserve = (spotId) => {
@@ -107,6 +75,7 @@ function ParkingLotDetails() {
               {spot.status === 'AVAILABLE' && (
                 <button onClick={() => handleReserve(spot.id)} className="reserve-button">Reserve</button>
               )}
+                <button className="spot-details" onClick={() => navigate(`/parking-spots/${spot.id}`)}>Details</button>
             </li>
           ))}
         </ul>

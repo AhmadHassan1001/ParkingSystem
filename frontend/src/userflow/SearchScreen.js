@@ -9,7 +9,7 @@ function SearchScreen() {
   const [filters, setFilters] = useState({
     location: 'New York',
   });
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [parkingLots, setParkingLots] = useState([
     {
       id: 1,

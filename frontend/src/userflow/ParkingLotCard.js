@@ -7,7 +7,7 @@ function ParkingLotCard({ parkingLot }) {
   const navigate = useNavigate();
 
   const handleCardClick = () => {
-    navigate(`/parking-lot/${parkingLot.id}`);
+    navigate(`/parking-lots/${parkingLot.id}`);
   };
 
   return (
