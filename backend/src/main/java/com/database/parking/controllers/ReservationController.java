@@ -8,6 +8,8 @@ import com.database.parking.dao.ParkingSpotDAO;
 import com.database.parking.dao.ReservationDAO;
 import com.database.parking.dto.ReservationRequest;
 import com.database.parking.enums.ReservationStatus;
+import com.database.parking.models.ParkingLot;
+import com.database.parking.models.ParkingSpot;
 import com.database.parking.models.Reservation;
 import com.database.parking.models.User;
 import com.database.parking.service.UserService;
@@ -82,6 +84,26 @@ public class ReservationController {
         }
 
         return new ResponseEntity<>(reservation, HttpStatus.CREATED);
+    }
+
+
+    @PostMapping("/{reservationId}/pay")
+    public ResponseEntity<Reservation> pay (@RequestHeader("Authorization") String token, @PathVariable long reservationId) {
+        String bearerToken = token.substring(7); // Remove "Bearer " prefix
+        User user = userService.getUserFromToken(bearerToken);
+        try{
+            Reservation reservation = reservationDAO.getById(reservationId);
+            ParkingSpot parkingSpot = parkingSpotDAO.getById(reservation.getParkingSpotId());
+            ParkingLot parkingLot = parkingLotDAO.getById(parkingSpot.getParkingLotId());
+            if (parkingLot.getManagerId() != user.getId()) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authorized to pay for this reservation");
+            }
+            reservation.setPaid(true);
+            reservationDAO.update(reservation);
+            return new ResponseEntity<>(reservation, HttpStatus.CREATED);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Reservation could not be paid");
+        }
     }
 
 

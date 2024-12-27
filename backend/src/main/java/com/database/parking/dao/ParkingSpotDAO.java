@@ -28,10 +28,13 @@ public class ParkingSpotDAO {
             PreparedStatement statement = connection.prepareStatement(query);
             ResultSet result = statement.executeQuery();
             while (result.next()) {
+                String type = result.getString("type").toUpperCase();
+                if ("EV CHARGING".equals(type))
+                  type = "EV";
                 ParkingSpot parkingSpot = ParkingSpot.builder()
                         .id(result.getLong("id"))
                         .parkingLotId(result.getLong("parking_lot_id"))
-                        .type(SpotType.valueOf(result.getString("type").toUpperCase()))
+                        .type(SpotType.valueOf(type))
                         .status(SpotStatus.valueOf(result.getString("status").toUpperCase()))
                         .build();
                 parkingSpots.add(parkingSpot);
