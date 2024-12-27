@@ -8,11 +8,14 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import com.database.parking.enums.SpotStatus;
 import com.database.parking.enums.SpotType;
 import com.database.parking.models.ParkingSpot;
 
 
+@Repository
 public class ParkingSpotDAO {
     private static final String url = "jdbc:mysql://localhost:3306/parking_management_system";
     private static final String username = "admin";

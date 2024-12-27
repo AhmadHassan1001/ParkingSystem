@@ -8,8 +8,10 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
 import com.database.parking.models.Penalty;
 
+@Repository
 public class PenaltyDAO {
     private static final String url = "jdbc:mysql://localhost:3306/parking_management_system";
     private static final String username = "admin";

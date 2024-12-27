@@ -11,7 +11,9 @@ import java.util.List;
 
 import com.database.parking.enums.ReservationStatus;
 import com.database.parking.models.Reservation;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class ReservationDAO {
     private final String url = "jdbc:mysql://localhost:3306/parking_management_system";
     private final String username = "admin";

@@ -9,8 +9,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import com.database.parking.models.Notification;
 
+@Repository
 public class NotificationDAO {
     private final String url = "jdbc:mysql://localhost:3306/parking_management_system";
     private final String username = "admin";

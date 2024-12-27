@@ -9,8 +9,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import com.database.parking.models.ParkingLot;
 
+@Repository
 public class ParkingLotDAO {
     private final String url = "jdbc:mysql://localhost:3306/parking_management_system";
     private final String username = "admin";

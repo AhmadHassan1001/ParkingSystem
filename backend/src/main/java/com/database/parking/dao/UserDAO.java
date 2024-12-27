@@ -9,8 +9,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import com.database.parking.enums.Role;
 import com.database.parking.models.User;
+
+@Repository
 
 public class UserDAO {
     private final String url = "jdbc:mysql://localhost:3306/parking_management_system";
