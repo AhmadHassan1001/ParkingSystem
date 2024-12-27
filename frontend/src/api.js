@@ -41,6 +41,17 @@ export const parkingSpotDetails = async (id) => {
   return response.data;
 }
 
+// Reservations
+export const reserveSpot = async (spotId, startTime, endTime) => {
+  const response = await client.post(`/reserve/${spotId}`, { startTime, endTime });
+  return response.data;
+}
+
+export const calculatePrice = async (spotId, startTime, endTime) => {
+  const response = await client.post(`/calculate-price/${spotId}`, { startTime, endTime });
+  return response.data;
+}
+
 // Locations
 export const locationList = async () => {
   const response = await client.get("/locations");
