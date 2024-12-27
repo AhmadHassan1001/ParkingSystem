@@ -28,8 +28,18 @@ public class ParkingLotController {
     private LocationDAO LocationDAO;
     
     @GetMapping
-    public List<ParkingLot> getParkingLots() {
-        return ParkingLotDAO.getAll();
+    public List<ParkingLotResponse> getParkingLots() {
+        List<ParkingLot> parkingLots = ParkingLotDAO.getAll();
+        List<ParkingLotResponse> parkingLotResponses = parkingLots.stream().map(parkingLot -> ParkingLotResponse.builder()
+            .id(parkingLot.getId())
+            .name(parkingLot.getName())
+            .location(LocationDAO.getById(parkingLot.getLocationId()))
+            .managerId(parkingLot.getManagerId())
+            .capacity(parkingLot.getCapacity())
+            .basicPrice(parkingLot.getBasicPrice())
+            .build()).toList();
+
+        return parkingLotResponses;
     }
 
     @GetMapping("/{id}")
