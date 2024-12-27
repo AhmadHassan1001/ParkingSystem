@@ -16,9 +16,7 @@ function ReserveDialog({ spotId, basicPrice, onClose, onReserve }) {
   };
 
   const handleReserve = async () => {
-    reserveSpot(spotId, startTime, endTime).then((data) => {
-      onReserve(data);
-    });
+    onReserve(startTime, endTime);
   };
 
   return (
@@ -30,7 +28,7 @@ function ReserveDialog({ spotId, basicPrice, onClose, onReserve }) {
           <input
             type="datetime-local"
             value={startTime}
-            onChange={(e) => setStartTime(e.target.value)}
+            onChange={(e) => setStartTime((e.target.value))}
           />
         </div>
         <div className="form-group">
@@ -38,7 +36,7 @@ function ReserveDialog({ spotId, basicPrice, onClose, onReserve }) {
           <input
             type="datetime-local"
             value={endTime}
-            onChange={(e) => setEndTime(e.target.value)}
+            onChange={(e) => setEndTime((e.target.value))}
           />
         </div>
         <div className="form-group">
