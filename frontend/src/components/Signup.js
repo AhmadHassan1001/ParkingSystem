@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Signup.css';
+import { info, signupDriver, signupParkingLot } from '../api';
 
 function Signup() {
   const [name, setName] = useState('');
@@ -21,7 +22,6 @@ function Signup() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const url = role === 'DRIVER' ? 'http://localhost:8080/auth/signup/driver' : 'http://localhost:8080/auth/signup/parking-lot';
 
     const userData = {
       name,
@@ -29,46 +29,19 @@ function Signup() {
       phone,
       role,
       ...(role === 'DRIVER' && { licensePlateNumber, paymentMethod }),
-      ...(role === 'MANAGEMENT' && {
-        parkingLot: {
-          location: {
-            city,
-            street,
-            locationLink,
-          },
-          price,
-          slots: {
-            REGULAR: regularSlots,
-            DISABLED: disabledSlots,
-            EV: evSlots,
-          },
-        },
-      }),
+      ...(role === 'MANAGEMENT' && { parkingLotName: name, city, street, locationLink, capacity: regularSlots + disabledSlots + evSlots, price, regularSlots, disabledSlots, evSlots }),
     };
 
+
+
+
+
+
     try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData),
-      });
+      const response = role === 'DRIVER' ? await signupDriver(userData) : await signupParkingLot(userData);
 
       if (response.ok) {
-        const data = await response;
-        console.log(data);
-        // const { token } = data;
-        // localStorage.setItem('token', token);
-        console.log('Signup successful');
-        console.log(localStorage.getItem('token'));
-
-        // Redirect based on user role
-        if (role === 'DRIVER') {
-          navigate('/search');
-        } else if (role === 'MANAGEMENT') {
-          navigate('/manager-dashboard');
-        }
+        navigate("/login")
       } else {
         console.error('Signup failed');
       }
@@ -76,6 +49,25 @@ function Signup() {
       console.error('Error:', error);
     }
   };
+
+  useEffect(() => {
+    const token = window.localStorage.getItem('token');
+    if (token) {
+      info().then((data) => {
+        console.log(data);
+        const role = data.role;
+        // Redirect based on user role
+        if (role === 'DRIVER') {
+          navigate('/search');
+        } else if (role === 'LOT_MANAGER') {
+          navigate('/manager-dashboard');
+        } else if (role === 'ADMIN') {
+          navigate('/admin-dashboard');
+        }
+
+      });
+    }
+  }, []);
 
   return (
     <div className="signup-container">
@@ -180,21 +172,21 @@ function Signup() {
                   name="regularSlots"
                   placeholder='Regular'
                   value={regularSlots}
-                  onChange={(e) => setRegularSlots(e.target.value)}
+                  onChange={(e) => setRegularSlots(parseInt(e.target.value))}
                 />
                 <input
                   type="number"
                   name="disabledSlots"
                   placeholder='Disabled'
                   value={disabledSlots}
-                  onChange={(e) => setDisabledSlots(e.target.value)}
+                  onChange={(e) => setDisabledSlots(parseInt(e.target.value))}
                 />
                 <input
                   type="number"
                   name="evSlots"
                   placeholder='EV'
                   value={evSlots}
-                  onChange={(e) => setEvSlots(e.target.value)}
+                  onChange={(e) => setEvSlots(parseInt(e.target.value))}
                 />
               </div>
               <div className="form-group">
@@ -210,6 +202,7 @@ function Signup() {
           )}
           <button type="submit" className="signup-button">Signup</button>
         </form>
+        <button className="login-button" onClick={() => navigate('/login')}>Log In</button>
       </div>
     </div>
   );

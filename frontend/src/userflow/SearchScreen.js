@@ -55,10 +55,6 @@ function SearchScreen() {
     },
   ]);
 
-  const notifications = [
-    { message: 'Parking lot 1 is full' },
-    { message: 'Parking lot 2 has a new violation' },
-  ];
 
   useEffect(() => {
     parkingLotList().then((data) => {
@@ -74,7 +70,6 @@ function SearchScreen() {
 
   return (
     <div className="search-screen">
-      <Navbar notifications={notifications} />
       <Filters filters={filters} setFilters={setFilters} />
       <ParkingLotGrid parkingLots={filteredParkingLots} loading={loading} />
     </div>
