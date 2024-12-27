@@ -19,8 +19,8 @@ function App() {
           <Route path="/search" element={<SearchScreen />} />
           <Route path="/manager-dashboard" element={<ManagerDashboard />} />
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
-          <Route path="/parking-lot/:id" element={<ParkingLotDetails />} />
-          <Route path="/parking-spot/:id" element={<ParkingSpotDetails />} />
+          <Route path="/parking-lots/:id" element={<ParkingLotDetails />} />
+          <Route path="/parking-spots/:id" element={<ParkingSpotDetails />} />
         </Routes>
       </div>
     </Router>

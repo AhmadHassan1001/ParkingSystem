@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import dummyImg from '../assets/ParkingLot.png';
 import './ParkingSpotDetials.css';
 import ReserveDialog from './ReserveDialog';
+import { parkingSpotDetails } from '../api';
 
 function ParkingSpotDetails() {
   const { id } = useParams();
@@ -10,7 +11,7 @@ function ParkingSpotDetails() {
     id: 1,
     type: 'REGULAR',
     status: 'OCCUPIED',
-    reservations: [
+    reservationsInfo: [
       {
         id: 1,
         startTime: '2021-08-01T10:00:00',
@@ -28,7 +29,10 @@ function ParkingSpotDetails() {
 
   
   useEffect(() => {
-    // TODO: Fetch parking spot details
+    parkingSpotDetails(id).then((data) => {
+      setParkingSpot(data);
+    });
+
   }, [id]);
 
   const handleReserve = (spotId) => {
@@ -90,7 +94,7 @@ function ParkingSpotDetails() {
       <div className="spots">
         <h4 className="title">Reservations:</h4>
         <ul>
-          {parkingSpot.reservations.map((reservation) => (
+          {parkingSpot.reservationsInfo?.map((reservation) => (
             <li key={reservation.id} className={`spot`}>
               <label>{formateDate(reservation.startTime)} - {formateDate(reservation.endTime)}</label>
             </li>

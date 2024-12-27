@@ -30,6 +30,16 @@ export const updateParkingLot = async (id, parkingLot) => {
   return response.data;
 }
 
+// Parking Spots
+export const parkingSpotList = async () => {
+  const response = await client.get("/parking-spots");
+  return response.data;
+}
+
+export const parkingSpotDetails = async (id) => {
+  const response = await client.get(`/parking-spots/${id}`);
+  return response.data;
+}
 
 // Locations
 export const locationList = async () => {

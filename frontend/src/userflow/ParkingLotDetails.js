@@ -4,6 +4,7 @@ import dummyImg from '../assets/ParkingLot.png';
 import './FiltersStyles.css';
 import ReserveDialog from './ReserveDialog';
 import { parkingLotDetails } from '../api';
+import { useNavigate } from 'react-router-dom';
 
 function ParkingLotDetails() {
   const { id } = useParams();
@@ -32,6 +33,7 @@ function ParkingLotDetails() {
     ],
   });
   const [selectedSpot, setSelectedSpot] = useState(null);
+  const navigate = useNavigate();
 
   
   useEffect(() => {
@@ -96,6 +98,7 @@ function ParkingLotDetails() {
               {spot.status === 'AVAILABLE' && (
                 <button onClick={() => handleReserve(spot.id)} className="reserve-button">Reserve</button>
               )}
+                <button className="spot-details" onClick={() => navigate(`/parking-spots/${spot.id}`)}>Details</button>
             </li>
           ))}
         </ul>
