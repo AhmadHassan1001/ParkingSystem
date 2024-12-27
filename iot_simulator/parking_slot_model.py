@@ -1,20 +1,26 @@
 import time
+import json
 import datetime
+import requests
 import threading
 
 from probability_model import ProbabilityModel
 from database_connection import DatabaseConnection
-from mysql.connector.locales.eng import client_error
 
-START_TIME_INDEX = 3
-END_TIME_INDEX = 4
 ID_INDEX = 0
+END_TIME_INDEX = 4
+START_TIME_INDEX = 3
+BASE_URL = "http://localhost:8080"
+
 
 
 class ParkingSlotModel(threading.Thread):
-  def __init__(self, slot_id):
+  def __init__(self, slot_id, token):
     super().__init__()
+
+    self.token = token
     self.slot_id = slot_id
+
     self.upcoming_start = None
     self.upcoming_end = None
     self.upcoming_reservation_id = None
@@ -73,7 +79,19 @@ class ParkingSlotModel(threading.Thread):
     if self.old_status != is_reserved:
       self.old_status = is_reserved
       print(f"Slot {self.slot_id} is reserved: {is_reserved}")
-      # TODO: Update the status in the backend
+      url = f"{BASE_URL}/iot/sensor/{self.slot_id}"
+
+      payload = {
+        "status": "AVAILABLE" if not is_reserved else "OCCUPIED"
+      }
+      headers = {
+        'Authorization': 'Bearer ' + self.token
+      }
+
+      response = requests.request("POST", url, headers=headers, json=payload)
+
+      print(response.text)
+
 
 
 if __name__ == "__main__":

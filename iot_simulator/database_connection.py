@@ -1,13 +1,12 @@
 import mysql.connector
 
-from mysql.connector.locales.eng import client_error
 
 class DatabaseConnection:
   def __init__(self):
     self.connection = mysql.connector.connect(host="localhost", user="root", password="root", database="parking_management_system")
   
-  def __del__(self):
-    self.connection.close()
+  # def __del__(self):
+  #   self.connection.close()
 
   def query(self, query, params):
     with self.connection.cursor() as cursor:
