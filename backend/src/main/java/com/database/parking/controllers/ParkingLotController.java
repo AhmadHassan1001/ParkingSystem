@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.database.parking.models.ParkingLot;
 
 import org.springframework.web.bind.annotation.GetMapping;
-
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.database.parking.dao.ParkingLotDAO;
 
@@ -25,6 +25,11 @@ public class ParkingLotController {
     @GetMapping
     public List<ParkingLot> getParkingLots() {
         return ParkingLotDAO.getAll();
+    }
+
+    @GetMapping("/{id}")
+    public ParkingLot getParkingLotById (@PathVariable long id) {
+        return ParkingLotDAO.getById(id);
     }
 
 
