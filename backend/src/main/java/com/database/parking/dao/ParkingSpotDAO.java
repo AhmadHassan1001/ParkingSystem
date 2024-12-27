@@ -90,8 +90,8 @@ public class ParkingSpotDAO {
             String query = "INSERT INTO parking_spot (parking_lot_id, type, status) VALUES (?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             statement.setLong(1, parkingSpot.getParkingLotId());
-            statement.setString(2, parkingSpot.getType().name());
-            statement.setString(3, parkingSpot.getStatus().name());
+            statement.setString(2, parkingSpot.getType().getType());
+            statement.setString(3, parkingSpot.getStatus().getStatus());
             statement.executeUpdate();
             
             ResultSet result = statement.getGeneratedKeys();
@@ -99,7 +99,7 @@ public class ParkingSpotDAO {
                 parkingSpot.setId(result.getLong(1));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 

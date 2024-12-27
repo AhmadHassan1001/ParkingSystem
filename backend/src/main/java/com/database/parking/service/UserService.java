@@ -7,11 +7,15 @@ import org.springframework.stereotype.Service;
 import com.database.parking.models.Driver;
 import com.database.parking.models.Location;
 import com.database.parking.models.ParkingLot;
+import com.database.parking.models.ParkingSpot;
 import com.database.parking.models.User;
 import com.database.parking.enums.Role;
+import com.database.parking.enums.SpotStatus;
+import com.database.parking.enums.SpotType;
 import com.database.parking.dao.DriverDAO;
 import com.database.parking.dao.LocationDAO;
 import com.database.parking.dao.ParkingLotDAO;
+import com.database.parking.dao.ParkingSpotDAO;
 import com.database.parking.dao.UserDAO;
 import com.database.parking.dto.SignupRequestDriver;
 import com.database.parking.dto.SignupRequestParkingLot;
@@ -27,6 +31,8 @@ public class UserService {
     private LocationDAO locationDAO = new LocationDAO();
 
     private ParkingLotDAO parkingLotDAO = new ParkingLotDAO();
+
+    private ParkingSpotDAO parkingSpotDAO = new ParkingSpotDAO();
 
     public void save(User user) {
         userDAO.save(user);
@@ -85,6 +91,43 @@ public class UserService {
                 .managerId(user.getId())
                 .build();
         parkingLotDAO.save(parkingLot);
+
+        // Parking Spots Creation
+        if (signupRequestParkingLot.getCapacity() != signupRequestParkingLot.getDisabledSlots() 
+                                                      + signupRequestParkingLot.getRegularSlots()
+                                                      + signupRequestParkingLot.getEvSlots()) {
+          throw new RuntimeException("Capacity should be equal to the sum of disabled, regular and EV slots");
+        }
+
+        // Regular parking spots
+        for (int i = 1; i <= signupRequestParkingLot.getRegularSlots(); i++) {
+          ParkingSpot parkingSpot = ParkingSpot.builder()
+                  .parkingLotId(parkingLot.getId())
+                  .type(SpotType.REGULAR)
+                  .status(SpotStatus.AVAILABLE)
+                  .build();
+          parkingSpotDAO.save(parkingSpot);
+        }
+
+        // Disabled parking spots
+        for (int i = 1; i <= signupRequestParkingLot.getDisabledSlots(); i++) {
+          ParkingSpot parkingSpot = ParkingSpot.builder()
+                  .parkingLotId(parkingLot.getId())
+                  .type(SpotType.DISABLED)
+                  .status(SpotStatus.AVAILABLE)
+                  .build();
+          parkingSpotDAO.save(parkingSpot);
+        }
+
+        // EV parking spots
+        for (int i = 1; i <= signupRequestParkingLot.getEvSlots(); i++) {
+          ParkingSpot parkingSpot = ParkingSpot.builder()
+                  .parkingLotId(parkingLot.getId())
+                  .type(SpotType.EV)
+                  .status(SpotStatus.AVAILABLE)
+                  .build();
+          parkingSpotDAO.save(parkingSpot);
+        }
 
         // (for simplicity, using id as token)
         return new TokenResponse(String.valueOf(user.getId()), user.getRole().toString());
