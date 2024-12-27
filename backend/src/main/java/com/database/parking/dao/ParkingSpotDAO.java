@@ -63,6 +63,28 @@ public class ParkingSpotDAO {
         return parkingSpot;
     }
 
+    public List<ParkingSpot> getByParkingLotId(Long parkingLotId) {
+        List<ParkingSpot> parkingSpots = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+            String query = "SELECT * FROM parking_spot WHERE parking_lot_id = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setLong(1, parkingLotId);
+            ResultSet result = statement.executeQuery();
+            while (result.next()) {
+                ParkingSpot parkingSpot = ParkingSpot.builder()
+                        .id(result.getLong("id"))
+                        .parkingLotId(result.getLong("parking_lot_id"))
+                        .type(SpotType.valueOf(result.getString("type").toUpperCase()))
+                        .status(SpotStatus.valueOf(result.getString("status").toUpperCase()))
+                        .build();
+                parkingSpots.add(parkingSpot);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return parkingSpots;
+    }
+
     public void save(ParkingSpot parkingSpot) {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             String query = "INSERT INTO parking_spot (parking_lot_id, type, status) VALUES (?, ?, ?)";
