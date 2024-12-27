@@ -1,7 +1,17 @@
 package com.database.parking.enums;
 
 public enum SpotStatus {
-    OCCUPIED,
-    AVAILABLE,
-    RESERVED
+    OCCUPIED("Occupied"),
+    AVAILABLE("Available"),
+    RESERVED("Reserved");
+    
+    private final String status;
+
+    SpotStatus(String status) {
+        this.status = status;
+    }
+
+    public String getStatus() {
+        return status;
+    }
 }

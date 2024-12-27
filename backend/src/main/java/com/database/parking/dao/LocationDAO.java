@@ -76,7 +76,7 @@ public class LocationDAO {
                 location.setId(resultSet.getLong(1));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -90,7 +90,7 @@ public class LocationDAO {
             statement.setLong(4, location.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }   
 
@@ -101,7 +101,7 @@ public class LocationDAO {
             statement.setLong(1, id);
             statement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
