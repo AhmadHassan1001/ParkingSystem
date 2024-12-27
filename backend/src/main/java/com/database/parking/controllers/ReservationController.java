@@ -44,7 +44,7 @@ public class ReservationController {
     public double calculateCost (@PathVariable long parkingSpotId, @RequestBody ReservationRequest reservationRequest) {
         LocalDateTime startTime = reservationRequest.getStartTime();
         LocalDateTime endTime = reservationRequest.getEndTime();
-        if (checkReservationDuration(parkingSpotId, startTime, endTime)) {
+        if (!checkReservationDuration(parkingSpotId, startTime, endTime)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Reservation duration is invalid");
         }
         long parkingLotId = parkingSpotDAO.getById(parkingSpotId).getParkingLotId();
@@ -57,7 +57,7 @@ public class ReservationController {
     public ResponseEntity<Reservation> reserve (@PathVariable long parkingSpotId, @RequestBody ReservationRequest reservationRequest) {
         LocalDateTime startTime = reservationRequest.getStartTime();
         LocalDateTime endTime = reservationRequest.getEndTime();
-        if (checkReservationDuration(parkingSpotId, startTime, endTime)) {
+        if (!checkReservationDuration(parkingSpotId, startTime, endTime)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Reservation duration is invalid");
         }
         Reservation reservation = Reservation.builder()
