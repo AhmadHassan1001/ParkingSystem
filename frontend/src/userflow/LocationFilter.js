@@ -6,9 +6,9 @@ function LocationFilter({ location, onChange }) {
   const [cities, setCities] = useState([]);
 
   useEffect(() => {
-    locationList().then((data) => {
-      setCities(data);
-    }
+    // locationList().then((data) => {
+    //   setCities(data);
+    // });
   }, []);
 
   return (

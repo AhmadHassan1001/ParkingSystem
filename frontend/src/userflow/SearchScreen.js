@@ -61,10 +61,10 @@ function SearchScreen() {
   ];
 
   useEffect(() => {
-    // parkingLotList().then((data) => {
-    //   setParkingLots(data);
-    //   setLoading(false);
-    // });
+    parkingLotList().then((data) => {
+      setParkingLots(data);
+      setLoading(false);
+    });
 
   }, []);
 

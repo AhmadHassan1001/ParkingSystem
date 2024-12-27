@@ -15,7 +15,7 @@ import com.database.parking.dao.ParkingLotDAO;
 
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/parking-lots")
 public class ParkingLotController {
 
