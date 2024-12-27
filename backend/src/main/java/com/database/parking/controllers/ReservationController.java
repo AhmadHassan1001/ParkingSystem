@@ -61,9 +61,7 @@ public class ReservationController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Reservation duration is invalid");
         }
         Reservation reservation = Reservation.builder()
-        // to be changed when implementing authentication
-            .userId(1L)
-        //
+            .userId(2L)
             .parkingSpotId(parkingSpotId)
             .startTime(startTime)
             .endTime(endTime)

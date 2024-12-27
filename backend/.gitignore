@@ -40,8 +40,8 @@ logs/
 spring.log
 
 # Application properties
-application*.yml
-application*.yaml
+# application*.yml
+# application*.yaml
 # application*.properties
 
 # Database

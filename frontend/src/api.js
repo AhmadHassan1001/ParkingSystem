@@ -43,12 +43,12 @@ export const parkingSpotDetails = async (id) => {
 
 // Reservations
 export const reserveSpot = async (spotId, startTime, endTime) => {
-  const response = await client.post(`/reserve/${spotId}`, { startTime, endTime });
+  const response = await client.post(`/reservation/${spotId}/reserve`, { startTime, endTime });
   return response.data;
 }
 
 export const calculatePrice = async (spotId, startTime, endTime) => {
-  const response = await client.post(`/calculate-price/${spotId}`, { startTime, endTime });
+  const response = await client.post(`/reservation/${spotId}/calculate-cost`, { startTime, endTime });
   return response.data;
 }
 

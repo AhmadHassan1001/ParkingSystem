@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import dummyImg from '../assets/ParkingLot.png';
 import './FiltersStyles.css';
 import ReserveDialog from './ReserveDialog';
-import { parkingLotDetails } from '../api';
+import { parkingLotDetails, reserveSpot } from '../api';
 import { useNavigate } from 'react-router-dom';
 
 function ParkingLotDetails() {
@@ -27,25 +27,11 @@ function ParkingLotDetails() {
     setSelectedSpot(null);
   };
 
-  const handleReserveConfirm = async (spotId, startTime, endTime, price) => {
-    try {
-      const response = await fetch(`/reserve/${spotId}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify({ startTime, endTime }),
-      });
-
-      if (response.ok) {
-        alert(`Reserved spot ${spotId} from ${startTime} to ${endTime} for $${price.toFixed(2)}`);
-      } else {
-        console.error('Reservation failed');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
+  const handleReserveConfirm = async (startTime, endTime) => {
+    reserveSpot(id, startTime, endTime).then((data) => {
+      alert(`Reserved spot ${id} from ${startTime} to ${endTime} for $${data.cost.toFixed(2)}`);
+      setSelectedSpot(null);
+    });
   };
 
   if (!parkingLot) {
