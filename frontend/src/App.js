@@ -20,7 +20,7 @@ function App() {
           <Route path="/manager-dashboard" element={<ManagerDashboard />} />
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
           <Route path="/parking-lot/:id" element={<ParkingLotDetails />} />
-          <Route path="/parking-space/:id" element={<ParkingSpotDetails />} />
+          <Route path="/parking-spot/:id" element={<ParkingSpotDetails />} />
         </Routes>
       </div>
     </Router>

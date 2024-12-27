@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import dummyImg from '../assets/ParkingLot.png';
-import './FiltersStyles.css';
+import './ParkingSpotDetials.css';
 import ReserveDialog from './ReserveDialog';
 
 function ParkingSpotDetails() {
@@ -9,7 +9,7 @@ function ParkingSpotDetails() {
   const [parkingSpot, setParkingSpot] = useState({
     id: 1,
     type: 'REGULAR',
-    status: 'AVAILABLE',
+    status: 'OCCUPIED',
     reservations: [
       {
         id: 1,
@@ -64,6 +64,10 @@ function ParkingSpotDetails() {
     return <div>Loading...</div>;
   }
 
+  const formateDate = (date) => {
+    return new Date(date).toLocaleString();
+  }
+
   return (
     <div className="parking-lot-details">
       <div className="content">
@@ -71,34 +75,28 @@ function ParkingSpotDetails() {
         <div className="content">
           <div className="header">
             <h3 className="title">Parking Lot {parkingSpot.id}</h3>
-            <label>{parkingSpot.location.city}, {parkingSpot.location.street}</label>
-            <a href={parkingSpot.location.mapLink} target="_blank" rel="noopener noreferrer" className="map-link">View on Map</a>
-            <label>Capacity: {parkingSpot.capacity}</label>
-            <label>Base Price: ${parkingSpot.basicPrice}</label>
+            <span className="info"> 
+              <label className='info-label'>Type:</label>
+              <label className='type'>{parkingSpot.type}</label>
+            </span>
+
+            <span className="info"> 
+              <label className='info-label'>Status:</label>
+              <label className={`status ${parkingSpot.status.toLowerCase()}`}>{parkingSpot.status}</label>
+            </span>
           </div>
         </div>
       </div>
       <div className="spots">
-        <h4 className="title">Parking Spots:</h4>
+        <h4 className="title">Reservations:</h4>
         <ul>
-          {parkingSpot.parkingSpots.map((spot) => (
-            <li key={spot.id} className={`spot ${spot.status.toLowerCase()}`}>
-              <span>Spot {spot.id} - {spot.type} - {spot.status}</span>
-              {spot.status === 'AVAILABLE' && (
-                <button onClick={() => handleReserve(spot.id)} className="reserve-button">Reserve</button>
-              )}
+          {parkingSpot.reservations.map((reservation) => (
+            <li key={reservation.id} className={`spot`}>
+              <label>{formateDate(reservation.startTime)} - {formateDate(reservation.endTime)}</label>
             </li>
           ))}
         </ul>
       </div>
-      {selectedSpot && (
-        <ReserveDialog
-          spotId={selectedSpot}
-          basicPrice={parkingSpot.basicPrice}
-          onClose={handleDialogClose}
-          onReserve={handleReserveConfirm}
-        />
-      )}
     </div>
   );
 }
