@@ -9,7 +9,8 @@ import com.database.parking.dao.ReservationDAO;
 import com.database.parking.dto.ReservationRequest;
 import com.database.parking.enums.ReservationStatus;
 import com.database.parking.models.Reservation;
-
+import com.database.parking.models.User;
+import com.database.parking.service.UserService;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 
 
@@ -39,6 +41,8 @@ public class ReservationController {
     @Autowired
     private ParkingLotDAO parkingLotDAO;
 
+    @Autowired
+    private UserService userService;
 
     @PostMapping("/{parkingSpotId}/calculate-cost")
     public double calculateCost (@PathVariable long parkingSpotId, @RequestBody ReservationRequest reservationRequest) {
@@ -54,14 +58,16 @@ public class ReservationController {
     }
     
     @PostMapping("/{parkingSpotId}/reserve")
-    public ResponseEntity<Reservation> reserve (@PathVariable long parkingSpotId, @RequestBody ReservationRequest reservationRequest) {
+    public ResponseEntity<Reservation> reserve (@RequestHeader("Authorization") String token, @PathVariable long parkingSpotId, @RequestBody ReservationRequest reservationRequest) {
+        String bearerToken = token.substring(7); // Remove "Bearer " prefix
+        User user = userService.getUserFromToken(bearerToken);
         LocalDateTime startTime = reservationRequest.getStartTime();
         LocalDateTime endTime = reservationRequest.getEndTime();
         if (!checkReservationDuration(parkingSpotId, startTime, endTime)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Reservation duration is invalid");
         }
         Reservation reservation = Reservation.builder()
-            .userId(2L)
+            .userId(user.getId())
             .parkingSpotId(parkingSpotId)
             .startTime(startTime)
             .endTime(endTime)

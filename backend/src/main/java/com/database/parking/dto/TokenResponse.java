@@ -10,5 +10,4 @@ import lombok.Setter;
 @Setter
 public class TokenResponse {
     private String token;
-    private String role;
 }

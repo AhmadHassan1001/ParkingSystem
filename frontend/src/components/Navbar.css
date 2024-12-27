@@ -7,6 +7,10 @@
   color: #555;
 }
 
+.navbar h1 {
+  cursor: pointer;
+}
+
 .notifications {
   position: relative;
 }
@@ -40,4 +44,19 @@ font-size: 2rem;
 
 .notification-item:last-child {
   border-bottom: none;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* width: 100px; */
+}
+
+.logout {
+  cursor: pointer;
+}
+
+.dashboard {
+  cursor: pointer;
 }

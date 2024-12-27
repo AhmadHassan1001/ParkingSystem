@@ -88,7 +88,7 @@ public class ParkingLotDAO {
                 parkingLot.setId(resultSet.getLong(1));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 

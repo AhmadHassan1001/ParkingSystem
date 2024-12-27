@@ -1,11 +1,24 @@
 import client from "./client";
 
 // Auth
-export const login = async (email, password) => {
-  const response = await client.post("/auth/login", { email, password });
+export const login = async (name, password) => {
+  const response = await client.post("/auth/login", { name, password });
   window.localStorage.setItem("token", response.data.token);
-  console.log(response.data.token);
-  console.log(window.localStorage.getItem('token'));
+  return response.data;
+}
+
+export const signupDriver = async (userData) => {
+  const response = await client.post("/auth/signup/driver", userData);
+  return response.data;
+}
+
+export const signupParkingLot = async (userData) => {
+  const response = await client.post("/auth/signup/parking-lot", userData);
+  return response.data;
+}
+
+export const info = async () => {
+  const response = await client.get("/auth/info");
   return response.data;
 }
 

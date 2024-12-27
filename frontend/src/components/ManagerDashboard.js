@@ -41,7 +41,6 @@ function ManagerDashboard() {
 
   return (
     <div className="dashboard">
-      <Navbar notifications={notifications} />
       <div>
         <h2>Parking Lot Dashboard</h2>
         <div className="dashboard-grid">
