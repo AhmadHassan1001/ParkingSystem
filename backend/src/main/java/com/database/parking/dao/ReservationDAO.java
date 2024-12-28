@@ -23,7 +23,7 @@ public class ReservationDAO {
     public void reserve (Reservation reservation) throws SQLException {
         Connection connection = DriverManager.getConnection(url, username, password);
         connection.setAutoCommit(false); 
-
+        
         try {
             String checkAvailabilityQuery = "SELECT * FROM parking_spot WHERE id = ? AND status = 'AVAILABLE' FOR UPDATE";
             try (PreparedStatement checkAvailabilityStmt = connection.prepareStatement(checkAvailabilityQuery)) {
@@ -51,6 +51,16 @@ public class ReservationDAO {
                 insertReservationStmt.setString(6, reservation.getStatus().name());
                 insertReservationStmt.setBoolean(7, reservation.isPaid());
                 insertReservationStmt.executeUpdate();
+            }
+            
+            
+            String insertNotificationQuery = "INSERT INTO notification (user_id, body_text, date) VALUES (?, ?, ?)";
+            try (PreparedStatement insertNotificationStmt = connection.prepareStatement(insertNotificationQuery)) {
+                insertNotificationStmt.setLong(1, reservation.getUserId());
+                
+                insertNotificationStmt.setString(2, "You have successfully reserved a parking spot with id = " + reservation.getParkingSpotId());
+                insertNotificationStmt.setTimestamp(3, java.sql.Timestamp.valueOf(java.time.LocalDateTime.now()));
+                insertNotificationStmt.executeUpdate();
             }
 
             connection.commit();
