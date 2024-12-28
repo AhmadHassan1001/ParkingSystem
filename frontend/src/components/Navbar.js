@@ -57,7 +57,6 @@ function Navbar() {
       eventSource.close();
     }
 
-
   }
 
   useEffect(() => {
