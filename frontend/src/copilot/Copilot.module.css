@@ -1,0 +1,27 @@
+.drawer{
+    width: 240px;
+    flex-shrink: 0;
+    position: fixed;
+    z-index: 1000;
+    bottom: 30px;
+    left: 30px;
+    background-color: white;
+    border-radius: 100px;
+    border: 1px solid #000000;
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+    height: 70px;
+    width: 70px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.drawer:hover{
+    cursor: pointer;
+}
+
+.drawer svg{
+  font-size: 50px;
+  color: #554b8f;
+}

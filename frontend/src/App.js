@@ -10,6 +10,7 @@ import ParkingLotDetails from './userflow/ParkingLotDetails';
 import ParkingSpotDetails from './userflow/ParkingSpotDetails';
 import Navbar from './components/Navbar';
 import { UserContext } from './UserContext';
+import Copilot from './copilot/Copilot';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -35,6 +36,7 @@ function App() {
             <Route path="/parking-spots/:id" element={<ParkingSpotDetails />} />
           </Routes>
         </UserContext.Provider>
+        <Copilot/>
       </div>
     </Router>
   );
