@@ -25,7 +25,7 @@ public class SseService {
 
     private final Map<Long, SseEmitter> emitters = new HashMap<>();
     
-    public void addEmitter(SseEmitter emitter, long userId) {
+    public void addEmitter(long userId, SseEmitter emitter) {
         emitters.put(userId, emitter);
         emitter.onCompletion(() -> emitters.remove(userId));
         emitter.onTimeout(() -> emitters.remove(userId));
