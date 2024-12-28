@@ -22,7 +22,7 @@ function App() {
       <div className="App" ref={divRef}>
         <UserContext.Provider value={{ user, setUser }}>
           <PageContext.Provider value={{ divRef }}>
-            <Navbar notifications={notifications} />
+            <Navbar />
             <Routes>
               <Route path="/" element={<SearchScreen />} />
               <Route path="/login" element={<Login />} />

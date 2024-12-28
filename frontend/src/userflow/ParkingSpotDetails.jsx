@@ -8,23 +8,7 @@ import { UserContext } from '../UserContext';
 
 function ParkingSpotDetails() {
   const { id } = useParams();
-  const [parkingSpot, setParkingSpot] = useState({
-    id: 1,
-    type: 'REGULAR',
-    status: 'OCCUPIED',
-    reservationsInfo: [
-      {
-        id: 1,
-        startTime: '2021-08-01T10:00:00',
-        endTime: '2021-08-01T12:00:00',
-      },
-      {
-        id: 2,
-        startTime: '2021-08-01T14:00:00',
-        endTime: '2021-08-01T16:00:00',
-      },
-    ],
-  });
+  const [parkingSpot, setParkingSpot] = useState({});
 
   const [parkingLot, setParkingLot] = useState(null);
   
@@ -88,18 +72,18 @@ function ParkingSpotDetails() {
   return (
     <div className="parking-lot-details">
       <div className="content">
-        <img src={dummyImg} alt={`Parking Lot ${parkingSpot.id}`} className="image" />
+        <img src={dummyImg} alt={`Parking Lot ${parkingSpot?.id}`} className="image" />
         <div className="content">
           <div className="header">
-            <h3 className="title">Parking Lot {parkingSpot.id}</h3>
+            <h3 className="title">Parking Lot {parkingSpot?.id}</h3>
             <span className="info"> 
               <label className='info-label'>Type:</label>
-              <label className='type'>{parkingSpot.type}</label>
+              <label className='type'>{parkingSpot?.type}</label>
             </span>
 
             <span className="info"> 
               <label className='info-label'>Status:</label>
-              <label className={`status ${parkingSpot.status.toLowerCase()}`}>{parkingSpot.status}</label>
+              <label className={`status ${parkingSpot?.status?.toLowerCase()}`}>{parkingSpot?.status}</label>
             </span>
           </div>
         </div>
@@ -108,7 +92,7 @@ function ParkingSpotDetails() {
         {parkingLot?.managerId == user?.id && (<>
         <h4 className="title">Reservations:</h4>
         <ul>
-          {parkingSpot.reservationsInfo?.map((reservation) => (
+          {parkingSpot?.reservationsInfo?.map((reservation) => (
            !reservation.paid && ( <li key={reservation.id} className={`reservation`}>
               <label>{formateDate(reservation.startTime)} - {formateDate(reservation.endTime)}</label>
               <button onClick={()=>handlePayment(reservation.id)}>Paid</button>

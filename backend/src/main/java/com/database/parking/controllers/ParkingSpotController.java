@@ -56,6 +56,7 @@ public class ParkingSpotController {
 
             return parkingSpotResponse;
         } catch (Exception e) {
+            e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error");
         }
     }
