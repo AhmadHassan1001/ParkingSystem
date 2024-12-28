@@ -3,12 +3,16 @@ package com.database.parking.controllers;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.database.parking.dao.LocationDAO;
+
 import com.database.parking.models.ParkingLot;
 import com.database.parking.models.ParkingSpot;
 
@@ -20,6 +24,8 @@ import org.springframework.http.HttpStatus;
 import com.database.parking.dao.ParkingLotDAO;
 import com.database.parking.dao.ParkingSpotDAO;
 import com.database.parking.dto.ParkingLotResponse;
+import com.database.parking.models.ParkingLot;
+import com.database.parking.models.ParkingSpot;
 
 
 @RestController
@@ -64,7 +70,8 @@ public class ParkingLotController {
     }
 
     @GetMapping("/{id}")
-    public ParkingLotResponse getParkingLotById (@PathVariable long id) throws SQLException  {
+
+    public ParkingLotResponse getParkingLotById (@PathVariable("id") long id) throws SQLException  {
         ParkingLot parkingLot = parkingLotDAO.getById(id);
         List<ParkingSpot> parkingSpots = parkingSpotDAO.getByParkingLotId(id);
         ParkingLotResponse parkingLotResponse = ParkingLotResponse.builder()

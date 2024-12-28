@@ -26,6 +26,8 @@ repositories {
 dependencies {
 	// implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	// implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'net.sf.jasperreports:jasperreports:6.20.0'
+    implementation 'com.github.librepdf:openpdf:1.3.27'
 	implementation 'org.projectlombok:lombok'
   implementation 'io.jsonwebtoken:jjwt:0.9.1'
   implementation "org.glassfish.jaxb:jaxb-runtime:2.3.2"

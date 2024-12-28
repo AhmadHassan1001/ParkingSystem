@@ -1,7 +1,6 @@
 
 package com.database.parking.controllers;
 
-import com.database.parking.models.Location;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +12,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.database.parking.dao.LocationDAO;
+import com.database.parking.models.Location;
 
 
 
 
 @RestController
 @RequestMapping("/locations")
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:3000")
 public class LocationController {
     
     @Autowired
