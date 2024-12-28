@@ -32,8 +32,8 @@ public class ReportService {
         try (Connection connection = DriverManager.getConnection(url, dbUserName, dbPassword)) {
 
             String rootDirectory = System.getProperty("user.dir");
-            String path1 = rootDirectory + "\\backend\\src\\main\\resources\\reports\\admin_dashboard_report_users.jrxml";
-            String path2 = rootDirectory + "\\backend\\src\\main\\resources\\reports\\admin_dashboard_report_lots.jrxml";
+            String path1 = rootDirectory + "/src/main/resources/reports/admin_dashboard_report_users.jrxml";
+            String path2 = rootDirectory + "/src/main/resources/reports/admin_dashboard_report_lots.jrxml";
 
             InputStream reportStream1 = new FileInputStream(path1);
             JasperReport jasperReport1 = JasperCompileManager.compileReport(reportStream1);
@@ -79,8 +79,8 @@ public class ReportService {
             JasperPrint jasperPrint2 = JasperFillManager.fillReport(jasperReport2, new HashMap<>(), dataSource2);
 
             // Save the reports to files
-            String outputPath1 = rootDirectory + "\\reports\\admin_dashboard_report_users.pdf";
-            String outputPath2 = rootDirectory + "\\reports\\admin_dashboard_report_lots.pdf";
+            String outputPath1 = rootDirectory + "/reports/admin_dashboard_report_users.pdf";
+            String outputPath2 = rootDirectory + "/reports/admin_dashboard_report_lots.pdf";
 
             JasperExportManager.exportReportToPdfFile(jasperPrint1, outputPath1);
             JasperExportManager.exportReportToPdfFile(jasperPrint2, outputPath2);
@@ -97,7 +97,7 @@ public class ReportService {
         try (Connection connection = DriverManager.getConnection(url, dbUserName, dbPassword)) {
 
             String rootDirectory = System.getProperty("user.dir");
-            String path = rootDirectory + "\\backend\\src\\main\\resources\\reports\\manager_dashboard_report.jrxml";
+            String path = rootDirectory + "/src/main/resources/reports/manager_dashboard_report.jrxml";
         
             InputStream reportStream = new FileInputStream(path);
             JasperReport jasperReport = JasperCompileManager.compileReport(reportStream);
@@ -126,7 +126,7 @@ public class ReportService {
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, new HashMap<>(), dataSource);
         
             // Save the report to a file
-            String outputPath = rootDirectory + "\\reports\\manager_dashboard_report.pdf";
+            String outputPath = rootDirectory + "/reports/manager_dashboard_report.pdf";
         
             JasperExportManager.exportReportToPdfFile(jasperPrint, outputPath);
         
