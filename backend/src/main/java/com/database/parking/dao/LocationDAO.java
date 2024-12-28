@@ -19,7 +19,7 @@ public class LocationDAO {
     private final String username = "admin";
     private final String password = "admin";
 
-    public List<Location> getAll() {
+    public List<Location> getAll() throws SQLException  {
         List<Location> locations = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             String query = "SELECT * FROM location";
@@ -34,14 +34,12 @@ public class LocationDAO {
                         .build();
                 locations.add(location);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        } 
         return locations;
     }
 
 
-    public Location getById(long id) {
+    public Location getById(long id) throws SQLException {
         Location location = null;
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             String query = "SELECT * FROM location WHERE id = ?";
@@ -56,13 +54,11 @@ public class LocationDAO {
                         .mapLink(resultSet.getString("map_link"))
                         .build();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        } 
         return location;
     }
 
-    public void save(Location location) {
+    public void save(Location location)throws SQLException  {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             String query = "INSERT INTO location (city, street, map_link) VALUES (?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -80,7 +76,7 @@ public class LocationDAO {
         }
     }
 
-    public void update(Location location) {
+    public void update(Location location) throws SQLException {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             String query = "UPDATE location SET city = ?, street = ?, map_link = ? WHERE id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
@@ -94,7 +90,7 @@ public class LocationDAO {
         }
     }   
 
-    public void delete(long id) {
+    public void delete(long id)throws SQLException  {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             String query = "DELETE FROM location WHERE id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
@@ -107,7 +103,7 @@ public class LocationDAO {
 
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         LocationDAO locationDAO = new LocationDAO();
         Location location = Location.builder()
                 .city("Istanbul")
