@@ -4,6 +4,7 @@ import LocationFilter from './LocationFilter';
 
 function Filters({ filters, setFilters }) {
   const updateFilters = (newFilters) => {
+    console.log('newFilters', newFilters);
     setFilters({ ...filters, ...newFilters });
   };
 
@@ -11,7 +12,7 @@ function Filters({ filters, setFilters }) {
     <div className="filters">
       <LocationFilter location={filters.location} onChange={(location) => updateFilters({ location })} />
       <button onClick={() => setFilters(filters)} className="apply-button">Apply</button>
-      <button onClick={() => setFilters({ location: 'New York' })} className="reset-button">Reset</button>
+      <button onClick={() => setFilters({ location: null })} className="reset-button">Reset</button>
     </div>
   );
 }

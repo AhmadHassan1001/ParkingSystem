@@ -7,7 +7,7 @@ import { parkingLotList } from '../api';
 
 function SearchScreen() {
   const [filters, setFilters] = useState({
-    location: 'New York',
+    location: null,
   });
   const [loading, setLoading] = useState(true);
   const [parkingLots, setParkingLots] = useState([
@@ -65,12 +65,13 @@ function SearchScreen() {
   }, []);
 
   const filteredParkingLots = parkingLots.filter(
-    (lot) => lot.location.city === filters.location
+    (lot) => lot.location.city === filters.location || !filters.location
   );
 
   return (
     <div className="search-screen">
       <Filters filters={filters} setFilters={setFilters} />
+      {filters.location}
       <ParkingLotGrid parkingLots={filteredParkingLots} loading={loading} />
     </div>
   );

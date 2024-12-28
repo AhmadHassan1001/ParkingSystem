@@ -17,11 +17,6 @@ function App() {
   const [user, setUser] = useState(null);
   const divRef = useRef(null); // Create a reference to the div
 
-  const notifications = [
-    { message: 'Parking lot 1 is full' },
-    { message: 'Parking lot 2 has a new violation' },
-  ];
-
   return (
     <Router>
       <div className="App" ref={divRef}>
@@ -40,6 +35,7 @@ function App() {
             </Routes>
             <Copilot/>
           </PageContext.Provider>
+
         </UserContext.Provider>
       </div>
     </Router>

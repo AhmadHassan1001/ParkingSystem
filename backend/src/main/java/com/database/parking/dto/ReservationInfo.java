@@ -19,4 +19,5 @@ public class ReservationInfo {
     long id;
     LocalDateTime startTime;
     LocalDateTime endTime;
+    boolean isPaid;
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import './AdminDashboard.css';
 import './ManagerDashboard.css';
-import Navbar from './Navbar';
 
 function ManagerDashboard() {
   const [notifications, setNotifications] = useState([]);
@@ -39,20 +39,23 @@ function ManagerDashboard() {
     fetchNotifications();
   }, []);
 
+  const viewReports = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/reports/manager-dashboard', {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+    } catch (error) {
+        console.error('Error viewing reports:', error);
+    }
+  };
+
   return (
     <div className="dashboard">
       <div>
         <h2>Parking Lot Dashboard</h2>
-        <div className="dashboard-grid">
-          {parkingLots.map((lot) => (
-            <div key={lot.id} className="dashboard-card">
-              <h3>{lot.name}</h3>
-              <p>Occupancy Rate: {lot.occupancyRate}%</p>
-              <p>Revenue: ${lot.revenue}</p>
-              <p>Violations: {lot.violations}</p>
-            </div>
-          ))}
-        </div>
+        <button className="dashboard-button" onClick={viewReports}>Generate Reports</button>
       </div>
     </div>
   );

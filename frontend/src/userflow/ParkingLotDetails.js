@@ -1,16 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import dummyImg from '../assets/ParkingLot.png';
 import './FiltersStyles.css';
 import ReserveDialog from './ReserveDialog';
 import { parkingLotDetails, reserveSpot } from '../api';
 import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../UserContext';
 
 function ParkingLotDetails() {
   const { id } = useParams();
   const [parkingLot, setParkingLot] = useState(null);
   const [selectedSpot, setSelectedSpot] = useState(null);
   const navigate = useNavigate();
+  const { user, setUser } = useContext(UserContext);
 
   
   useEffect(() => {
@@ -28,9 +30,14 @@ function ParkingLotDetails() {
   };
 
   const handleReserveConfirm = async (startTime, endTime) => {
-    reserveSpot(id, startTime, endTime).then((data) => {
-      alert(`Reserved spot ${id} from ${startTime} to ${endTime} for $${data.cost.toFixed(2)}`);
+    reserveSpot(selectedSpot, startTime, endTime).then((data) => {
+      alert(`Reserved spot ${selectedSpot} from ${startTime} to ${endTime} for $${data.cost.toFixed(2)}`);
       setSelectedSpot(null);
+      // refresh page
+      parkingLotDetails(id).then((data) => {
+        setParkingLot(data);
+      });
+
     });
   };
 
@@ -58,10 +65,11 @@ function ParkingLotDetails() {
           {parkingLot.parkingSpots.map((spot) => (
             <li key={spot.id} className={`spot ${spot.status.toLowerCase()}`}>
               <span>Spot {spot.id} - {spot.type} - {spot.status}</span>
-              {spot.status === 'AVAILABLE' && (
+              {spot.status === 'AVAILABLE' &&
+                parkingLot.managerId !== user.id && (
                 <button onClick={() => handleReserve(spot.id)} className="reserve-button">Reserve</button>
               )}
-                <button className="spot-details" onClick={() => navigate(`/parking-spots/${spot.id}`)}>Details</button>
+              <button className="spot-details" onClick={() => navigate(`/parking-spots/${spot.id}`)}>Details</button>
             </li>
           ))}
         </ul>

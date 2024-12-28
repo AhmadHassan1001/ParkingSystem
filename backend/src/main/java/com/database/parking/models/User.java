@@ -53,6 +53,10 @@ public class User{
                 return user;
             }
         };
-    }    
-
+    }
+    
+    public static void main(String[] args) {
+      String hashedPassword = User.hashPassword("admin_password");
+      System.out.println(hashedPassword);
+  }
 }

@@ -65,6 +65,11 @@ export const calculatePrice = async (spotId, startTime, endTime) => {
   return response.data;
 }
 
+export const reservationPaid = async (reservationId) => {
+  const response = await client.post(`/reservation/${reservationId}/pay`);
+  return response.data;
+}
+
 // Locations
 export const locationList = async () => {
   const response = await client.get("/locations");

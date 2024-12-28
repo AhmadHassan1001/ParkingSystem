@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,8 +18,8 @@ public class PenaltyDAO {
     private static final String username = "admin";
     private static final String password = "admin";
     
-    public List<Penalty> getAll() {
-        List<Penalty> penalties = new ArrayList<>();
+    public List<Penalty> getAll() throws SQLException {
+    List<Penalty> penalties = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             String query = "SELECT * FROM penalty";
             PreparedStatement statement = connection.prepareStatement(query);
@@ -33,13 +34,11 @@ public class PenaltyDAO {
                         .build();
                 penalties.add(penalty);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } 
         return penalties;
     }
 
-    public List<Penalty> getByUserId(Long userId) {
+    public List<Penalty> getByUserId(Long userId) throws SQLException {
         List<Penalty> penalties = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             String query = "SELECT * FROM penalty WHERE user_id = ?";
@@ -56,13 +55,11 @@ public class PenaltyDAO {
                         .build();
                 penalties.add(penalty);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } 
         return penalties;
     }
 
-    public Penalty getById(Long id) {
+    public Penalty getById(Long id) throws SQLException {
         Penalty penalty = null;
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             String query = "SELECT * FROM penalty WHERE id = ?";
@@ -78,13 +75,11 @@ public class PenaltyDAO {
                         .amount(result.getDouble("amount"))
                         .build();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } 
         return penalty;
     }
 
-    public void save(Penalty penalty) {
+    public void save(Penalty penalty) throws SQLException {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             String query = "INSERT INTO penalty (user_id, parking_lot_id, description, amount) VALUES (?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -99,12 +94,10 @@ public class PenaltyDAO {
                 penalty.setId(result.getLong(1));
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } 
     }
         
-    public void update(Penalty penalty) {
+    public void update(Penalty penalty) throws SQLException {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             String query = "UPDATE penalty SET user_id = ?, parking_lot_id = ?, description = ?, amount = ? WHERE id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
@@ -114,23 +107,19 @@ public class PenaltyDAO {
             statement.setDouble(4, penalty.getAmount());
             statement.setLong(5, penalty.getId());
             statement.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } 
     }
 
-    public void delete(Long id) {
+    public void delete(Long id) throws SQLException {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             String query = "DELETE FROM penalty WHERE id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setLong(1, id);
             statement.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } 
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         PenaltyDAO penaltyDAO = new PenaltyDAO();
         
         // Penalty penalty1 = Penalty.builder()
