@@ -32,8 +32,8 @@
     left: 100px;
     height: 200px;
     width: 200px;
-    justify-content: center;
-    align-items: center;
+    justify-content: space-between;
+    align-items: space-between;
     display: flex;
     flex-direction: column;
     background-color: white;
