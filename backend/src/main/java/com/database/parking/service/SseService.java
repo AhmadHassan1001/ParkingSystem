@@ -27,8 +27,7 @@ public class SseService {
     
     public void addEmitter(long userId, SseEmitter emitter) {
         emitters.put(userId, emitter);
-        emitter.onCompletion(() -> emitters.remove(userId));
-        emitter.onTimeout(() -> emitters.remove(userId));
+        
     }
 
     @Scheduled(fixedRate = 1000)
@@ -37,11 +36,8 @@ public class SseService {
             try {
                 long userId = entry.getKey();
                 List<Notification> notifications = notificationDAO.getNTopNotifications(userId, 5);
-                for (Notification notification : notifications) {
-                    entry.getValue().send(notification);
-                }
+                entry.getValue().send(notifications);
             } catch (Exception e) {
-                entry.getValue().complete();
                 emitters.remove(entry.getKey());
                 throw e;
             }

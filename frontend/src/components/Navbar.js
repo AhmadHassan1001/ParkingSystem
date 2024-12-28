@@ -11,12 +11,16 @@ function Navbar() {
   const [showNotifications, setShowNotifications] = useState(false);
   const [dashboard, setDashboard] = useState(null);
   const [notifications, setNotifications] = useState([]);
+  const [newNotification, setNewNotification] = useState(false);
   const { user, setUser } = useContext(UserContext);
+  let maxNotificationId=0;
   let eventSource;
 
   const navigate = useNavigate();
   
   const toggleNotifications = () => {
+    if(!showNotifications)
+      setNewNotification(false);
     setShowNotifications(!showNotifications);
   };
 
@@ -53,15 +57,21 @@ function Navbar() {
           },
         }),
     })
-    
+
     eventSource.onmessage = (event) => {
-      const notification = JSON.parse(event.data);
-      setNotifications([notification, ...notifications]);
+      const notifications = JSON.parse(event.data);
+      // get maximum id
+      let newNotificationId = Math.max.apply(Math, notifications.map(function(o) { return o.id; }));
+      if(newNotificationId > maxNotificationId){
+        maxNotificationId = newNotificationId;
+        setNewNotification(true);
+      }
+      setNotifications(notifications.map((notification) => (notification.bodyText)));
     };
 
     eventSource.onerror = (error) => {
       console.error('EventSource failed:', error);
-      eventSource.close();
+      // eventSource.close();
     }
 
   }
@@ -90,12 +100,13 @@ function Navbar() {
       <div className='actions'>
         <div className="notifications">
           <span className="notification-icon" onClick={toggleNotifications}>🔔</span>
+          {newNotification && <span className="notification-dot"></span>}
           {showNotifications && (
             <div className="notification-dropdown">
               {notifications.length > 0 ? (
                 notifications.map((notification, index) => (
                   <div key={index} className="notification-item">
-                    {notification.message}
+                    {notification}
                   </div>
                 ))
               ) : (
