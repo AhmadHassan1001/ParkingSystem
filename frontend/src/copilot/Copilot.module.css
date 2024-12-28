@@ -25,3 +25,19 @@
   font-size: 50px;
   color: #554b8f;
 }
+
+.chat {
+    position: fixed;
+    bottom: 100px;
+    left: 100px;
+    height: 200px;
+    width: 200px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 20px;
+    border-bottom-left-radius: 0;
+
+}
