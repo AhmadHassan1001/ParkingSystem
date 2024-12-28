@@ -33,6 +33,11 @@ function ParkingLotDetails() {
     reserveSpot(selectedSpot, startTime, endTime).then((data) => {
       alert(`Reserved spot ${selectedSpot} from ${startTime} to ${endTime} for $${data.cost.toFixed(2)}`);
       setSelectedSpot(null);
+      // refresh page
+      parkingLotDetails(id).then((data) => {
+        setParkingLot(data);
+      });
+
     });
   };
 
