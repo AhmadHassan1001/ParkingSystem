@@ -2,6 +2,7 @@ package com.database.parking.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,6 +12,7 @@ import com.database.parking.models.User;
 import com.database.parking.service.UserService;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 public class SseController {
 
     @Autowired

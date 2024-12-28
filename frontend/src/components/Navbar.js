@@ -5,6 +5,7 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import { info } from '../api';
 import { UserContext } from '../UserContext';
+import {EventSource} from 'eventsource'
 
 function Navbar() {
   const [showNotifications, setShowNotifications] = useState(false);
@@ -43,10 +44,16 @@ function Navbar() {
   const establishSSE = () => {
     const token = localStorage.getItem('token');
     eventSource = new EventSource(`http://localhost:8080/sse`, {
-      headers: {
-      'Authorization': `Bearer ${token}`
-      }
-    });
+      fetch: (input, init) =>
+        fetch(input, {
+          ...init,
+          headers: {
+            ...init.headers,
+            Authorization: `Bearer ${token}`,
+          },
+        }),
+    })
+    
     eventSource.onmessage = (event) => {
       const notification = JSON.parse(event.data);
       setNotifications([notification, ...notifications]);
