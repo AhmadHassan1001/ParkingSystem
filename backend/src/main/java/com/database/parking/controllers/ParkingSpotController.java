@@ -1,8 +1,15 @@
 package com.database.parking.controllers;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.http.HttpStatus;
 
 import com.database.parking.dao.ParkingSpotDAO;
 import com.database.parking.dao.ReservationDAO;
@@ -13,19 +20,9 @@ import com.database.parking.models.ParkingSpot;
 import com.database.parking.models.Reservation;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-
-
 @RestController
 @RequestMapping("/parking-spots")
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:3000")
 public class ParkingSpotController {
     
     @Autowired
@@ -35,7 +32,7 @@ public class ParkingSpotController {
     private ReservationDAO reservationDAO;
 
     @GetMapping("/{id}")
-    public ParkingSpotResponse getParkingSpotDetails (@PathVariable long id) {
+    public ParkingSpotResponse getParkingSpotDetails (@PathVariable("id") long id) {
         try {
             ParkingSpot parkingSpot = parkingSpotDAO.getById(id);
             List<Reservation> reservations = reservationDAO.getByParkingSpotId(id);

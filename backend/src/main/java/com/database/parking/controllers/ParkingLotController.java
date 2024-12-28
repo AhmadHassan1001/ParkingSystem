@@ -2,20 +2,19 @@ package com.database.parking.controllers;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.database.parking.dao.LocationDAO;
-import com.database.parking.models.ParkingLot;
-import com.database.parking.models.ParkingSpot;
-
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.beans.factory.annotation.Autowired;
 import com.database.parking.dao.ParkingLotDAO;
 import com.database.parking.dao.ParkingSpotDAO;
 import com.database.parking.dto.ParkingLotResponse;
+import com.database.parking.models.ParkingLot;
+import com.database.parking.models.ParkingSpot;
 
 
 @RestController
@@ -50,7 +49,7 @@ public class ParkingLotController {
     }
 
     @GetMapping("/{id}")
-    public ParkingLotResponse getParkingLotById (@PathVariable long id) {
+    public ParkingLotResponse getParkingLotById (@PathVariable("id") long id) {
         ParkingLot parkingLot = ParkingLotDAO.getById(id);
         List<ParkingSpot> parkingSpots = ParkingSpotDAO.getByParkingLotId(id);
         ParkingLotResponse parkingLotResponse = ParkingLotResponse.builder()

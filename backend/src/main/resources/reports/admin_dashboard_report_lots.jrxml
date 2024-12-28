@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="parking_lot_report"
+              pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20"
+              topMargin="20" bottomMargin="20" uuid="23456789-2345-2345-2345-234567890123">
+
+    <parameter name="parking_lot_id" class="java.lang.Integer"/>
+    <parameter name="parking_lot_name" class="java.lang.String"/>
+    <parameter name="parking_lot_total_revenue" class="java.lang.Integer"/>
+    <parameter name="parking_lot_total_reservations" class="java.lang.Double"/>
+
+    <field name="parking_lot_id" class="java.lang.Integer"/>
+    <field name="parking_lot_name" class="java.lang.String"/>
+    <field name="parking_lot_total_revenue" class="java.lang.Integer"/>
+    <field name="parking_lot_total_reservations" class="java.lang.Double"/>
+
+    <title>
+        <band height="50">
+            <textField>
+                <reportElement x="0" y="0" width="555" height="50"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="24" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Parking Lot Report"]]></textFieldExpression>
+            </textField>
+        </band>
+    </title>
+
+    <columnHeader>
+        <band height="30">
+            <staticText>
+                <reportElement x="0" y="0" width="100" height="30"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="12" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Parking Lot ID]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="100" y="0" width="100" height="30"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="12" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Parking Lot Name]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="200" y="0" width="100" height="30"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="12" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Total Revenue]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="300" y="0" width="100" height="30"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="12" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Total Reservations]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+
+    <detail>
+        <band height="30">
+            <textField>
+                <reportElement x="0" y="0" width="100" height="30"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{parking_lot_id}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="100" y="0" width="100" height="30"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{parking_lot_name}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="200" y="0" width="100" height="30"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{parking_lot_total_revenue}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="300" y="0" width="100" height="30"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{parking_lot_total_reservations}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+
+</jasperReport>

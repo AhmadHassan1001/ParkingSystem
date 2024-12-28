@@ -1,5 +1,17 @@
 package com.database.parking.controllers;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -12,24 +24,11 @@ import com.database.parking.models.Reservation;
 import com.database.parking.models.User;
 import com.database.parking.service.UserService;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-
 
 
 @RestController
 @RequestMapping("/reservation")
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:3000")
 public class ReservationController {
     
     @Autowired
@@ -45,7 +44,7 @@ public class ReservationController {
     private UserService userService;
 
     @PostMapping("/{parkingSpotId}/calculate-cost")
-    public double calculateCost (@PathVariable long parkingSpotId, @RequestBody ReservationRequest reservationRequest) {
+    public double calculateCost (@PathVariable("parkingSpotId") long parkingSpotId, @RequestBody ReservationRequest reservationRequest) {
         LocalDateTime startTime = reservationRequest.getStartTime();
         LocalDateTime endTime = reservationRequest.getEndTime();
         if (!checkReservationDuration(parkingSpotId, startTime, endTime)) {
@@ -58,7 +57,7 @@ public class ReservationController {
     }
     
     @PostMapping("/{parkingSpotId}/reserve")
-    public ResponseEntity<Reservation> reserve (@RequestHeader("Authorization") String token, @PathVariable long parkingSpotId, @RequestBody ReservationRequest reservationRequest) {
+    public ResponseEntity<Reservation> reserve (@RequestHeader("Authorization") String token, @PathVariable("parkingSpotId") long parkingSpotId, @RequestBody ReservationRequest reservationRequest) {
         String bearerToken = token.substring(7); // Remove "Bearer " prefix
         User user = userService.getUserFromToken(bearerToken);
         LocalDateTime startTime = reservationRequest.getStartTime();
