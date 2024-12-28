@@ -1,5 +1,6 @@
 package com.database.parking.service;
 
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
@@ -36,11 +37,11 @@ public class UserService {
     private ParkingLotDAO parkingLotDAO = new ParkingLotDAO();
     private ParkingSpotDAO parkingSpotDAO = new ParkingSpotDAO();
 
-    public void save(User user) {
+    public void save(User user) throws SQLException {
         userDAO.save(user);
     }
 
-    public TokenResponse login(String name, String password) {
+    public TokenResponse login(String name, String password) throws SQLException {
         User user = userDAO.getByNameAndPassword(name, password);
         if (user != null) {
             String jwt = Jwts.builder()
@@ -68,7 +69,8 @@ public class UserService {
       }
     }
 
-    public User signupDriver(SignupRequestDriver signupRequestDriver) {
+
+    public User signupDriver(SignupRequestDriver signupRequestDriver) throws SQLException {
       User user;
       try{
         user = User.builder()
@@ -92,7 +94,7 @@ public class UserService {
         return user;
     }
 
-    public User signupParkingLotManager(SignupRequestParkingLot signupRequestParkingLot) {
+    public User signupParkingLotManager(SignupRequestParkingLot signupRequestParkingLot) throws SQLException  {
         User user;
         try{
           user = User.builder()
@@ -163,19 +165,19 @@ public class UserService {
         return user;
     }
 
-    public void update(User user) {
+    public void update(User user) throws SQLException {
         userDAO.update(user);
     }
 
-    public void delete(long id) {
+    public void delete(long id) throws SQLException {
         userDAO.delete(id);
     }
 
-    public User getById(long id) {
+    public User getById(long id) throws SQLException {
         return userDAO.getById(id);
     }
 
-    public List<User> getAll() {
+    public List<User> getAll() throws SQLException {
         return userDAO.getAll();
     }
 

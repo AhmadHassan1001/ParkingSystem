@@ -28,8 +28,12 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<TokenResponse> login(@RequestBody LoginRequest loginRequest) {
-        TokenResponse tokenResponse = userService.login(loginRequest.getName(), loginRequest.getPassword());
-        return ResponseEntity.ok(tokenResponse);
+        try {
+            TokenResponse tokenResponse = userService.login(loginRequest.getName(), loginRequest.getPassword());
+            return ResponseEntity.ok(tokenResponse);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @GetMapping("/info")
@@ -41,21 +45,21 @@ public class AuthController {
     
     @PostMapping("/signup/driver")
     public ResponseEntity<User> signupDriver(@RequestBody SignupRequestDriver signupRequestDriver) {
-        try{
+        try {
             User user = userService.signupDriver(signupRequestDriver);
             return ResponseEntity.ok(user);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.badRequest().build();
         }
     }
 
     @PostMapping("/signup/parking-lot")
     public ResponseEntity<User> signupParkingLotManager(@RequestBody SignupRequestParkingLot signupRequestParkingLot) {
-        try{
+        try {
             User user = userService.signupParkingLotManager(signupRequestParkingLot);
             return ResponseEntity.ok(user);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.badRequest().build();
         }
     }
 }

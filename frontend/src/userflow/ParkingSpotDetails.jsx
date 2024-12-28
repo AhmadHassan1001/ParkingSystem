@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import dummyImg from '../assets/ParkingLot.png';
 import './ParkingSpotDetials.css';
 import ReserveDialog from './ReserveDialog';
-import { parkingSpotDetails } from '../api';
+import { parkingLotDetails, parkingSpotDetails, reservationPaid } from '../api';
+import { UserContext } from '../UserContext';
 
 function ParkingSpotDetails() {
   const { id } = useParams();
@@ -25,23 +26,20 @@ function ParkingSpotDetails() {
     ],
   });
 
-  const [selectedSpot, setSelectedSpot] = useState(null);
+  const [parkingLot, setParkingLot] = useState(null);
+  
+  const {user, setUser} = useContext(UserContext);
 
   
   useEffect(() => {
     parkingSpotDetails(id).then((data) => {
       setParkingSpot(data);
+      parkingLotDetails(data.parkingLotId).then((data) => {
+        setParkingLot(data);
+      });
     });
 
   }, [id]);
-
-  const handleReserve = (spotId) => {
-    setSelectedSpot(spotId);
-  };
-
-  const handleDialogClose = () => {
-    setSelectedSpot(null);
-  };
 
   const handleReserveConfirm = async (spotId, startTime, endTime, price) => {
     try {
@@ -72,6 +70,21 @@ function ParkingSpotDetails() {
     return new Date(date).toLocaleString();
   }
 
+  const handlePayment = (reservationId) => {
+    reservationPaid(reservationId).then((data) => {
+
+      parkingSpotDetails(id).then((data) => {
+        setParkingSpot(data);
+        parkingLotDetails(data.parkingLotId).then((data) => {
+          setParkingLot(data);
+        });
+      });
+      alert(`Payment for reservation ${reservationId} was successful`);
+    }).catch((error) => {
+      console.error('Error:', error);
+    });
+  }
+
   return (
     <div className="parking-lot-details">
       <div className="content">
@@ -92,14 +105,18 @@ function ParkingSpotDetails() {
         </div>
       </div>
       <div className="spots">
+        {parkingLot?.managerId == user?.id && (<>
         <h4 className="title">Reservations:</h4>
         <ul>
           {parkingSpot.reservationsInfo?.map((reservation) => (
-            <li key={reservation.id} className={`spot`}>
+           !reservation.paid && ( <li key={reservation.id} className={`reservation`}>
               <label>{formateDate(reservation.startTime)} - {formateDate(reservation.endTime)}</label>
-            </li>
+              <button onClick={()=>handlePayment(reservation.id)}>Paid</button>
+            </li>)
           ))}
         </ul>
+        </>)
+        }
       </div>
     </div>
   );

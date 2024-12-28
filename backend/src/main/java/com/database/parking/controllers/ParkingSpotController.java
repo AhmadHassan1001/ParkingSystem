@@ -39,10 +39,11 @@ public class ParkingSpotController {
 
             // choose reservations info whose status is ACTIVE
             List<ReservationInfo> reservationsInfo = reservations.stream()
-            .filter(reservation -> reservation.getStatus().equals(ReservationStatus.ACTIVE)).map(reservation -> ReservationInfo.builder()
+            .filter(reservation -> reservation.getStatus().equals(ReservationStatus.COMPLETED)).map(reservation -> ReservationInfo.builder()
                 .id(reservation.getId())
                 .startTime(reservation.getStartTime())
                 .endTime(reservation.getEndTime())
+                .isPaid(reservation.isPaid())
                 .build()).toList();
 
             ParkingSpotResponse parkingSpotResponse = ParkingSpotResponse.builder()

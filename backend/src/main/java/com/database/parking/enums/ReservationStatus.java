@@ -1,7 +1,7 @@
 package com.database.parking.enums;
 
 public enum ReservationStatus {
-    COMPLETE,
+    COMPLETED,
     CANCELLED,
     ACTIVE
 }

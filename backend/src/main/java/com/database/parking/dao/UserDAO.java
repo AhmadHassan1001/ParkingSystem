@@ -24,7 +24,7 @@ public class UserDAO {
     private final String dbUserName = "admin";
     private final String dbPassword = "admin";
     
-    public List<User> getAll() {
+    public List<User> getAll() throws SQLException {
         List<User> users = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(url, dbUserName, dbPassword)) {
             String query = "SELECT * FROM user";
@@ -40,13 +40,11 @@ public class UserDAO {
                         .build();
                 users.add(user);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        } 
         return users;
     }
 
-    public User getById(long id) {
+    public User getById(long id) throws SQLException {
         User user = null;
         try (Connection connection = DriverManager.getConnection(url, dbUserName, dbPassword)) {
             String query = "SELECT * FROM user WHERE id = ?";
@@ -62,13 +60,11 @@ public class UserDAO {
                         .password(resultSet.getString("password"))
                         .build();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        } 
         return user;
     }
     
-    public User getByNameAndPassword(String name, String password) {
+    public User getByNameAndPassword(String name, String password) throws SQLException {
         User user = null;
         try (Connection connection = DriverManager.getConnection(url, dbUserName, dbPassword)) {
             String query = "SELECT * FROM user WHERE name = ? AND password = ?";
@@ -86,13 +82,11 @@ public class UserDAO {
                         .password(password)
                         .build();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        } 
         return user;
     }
 
-    public void save(User user) {
+    public void save(User user) throws SQLException {
         try (Connection connection = DriverManager.getConnection(url, dbUserName, dbPassword)) {
             String query = "INSERT INTO user (name, phone, role, password) VALUES (?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
@@ -112,7 +106,7 @@ public class UserDAO {
         }
     }
 
-    public void update(User user) {
+    public void update(User user) throws SQLException {
         try (Connection connection = DriverManager.getConnection(url, dbUserName, dbPassword)) {
             String query = "UPDATE user SET name = ?, phone = ?, role = ?, password = ? WHERE id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
@@ -122,21 +116,17 @@ public class UserDAO {
             statement.setString(4, user.getPassword());
             statement.setLong(5, user.getId());
             statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        } 
     }
     
 
-    public void delete(long id) {
+    public void delete(long id) throws SQLException {
         try (Connection connection = DriverManager.getConnection(url, dbUserName, dbPassword)) {
             String query = "DELETE FROM user WHERE id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setLong(1, id);
             statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        } 
     }
 
 
