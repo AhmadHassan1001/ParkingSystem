@@ -23,6 +23,18 @@ function ParkingSpotDetails() {
       });
     });
 
+    // add set interval to update spot data each 1sec
+    setInterval(() => {
+      parkingSpotDetails(id).then((data) => {
+        setParkingSpot(data);
+        parkingLotDetails(data.parkingLotId).then((data) => {
+          setParkingLot(data);
+        });
+      }).catch((error) => {
+        console.error('Error:', error);
+      });
+    }, 1000);
+
   }, [id]);
 
   const handleReserveConfirm = async (spotId, startTime, endTime, price) => {

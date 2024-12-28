@@ -19,6 +19,15 @@ function ParkingLotDetails() {
     parkingLotDetails(id).then((data) => {
       setParkingLot(data);
     });
+
+    // add set interval to update spot data each 1sec
+    setInterval(() => {
+      parkingLotDetails(id).then((data) => {
+        setParkingLot(data);
+      }).catch((error) => {
+        console.error('Error:', error);
+      });
+    }, 1000);
   }, [id]);
 
   const handleReserve = (spotId) => {
