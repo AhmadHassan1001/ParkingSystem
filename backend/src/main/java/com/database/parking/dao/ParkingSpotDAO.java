@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ public class ParkingSpotDAO {
     private static final String username = "admin";
     private static final String password = "admin";
 
-    public List<ParkingSpot> getAll() {
+    public List<ParkingSpot> getAll() throws SQLException{
         List<ParkingSpot> parkingSpots = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             String query = "SELECT * FROM parking_spot";
@@ -36,13 +37,11 @@ public class ParkingSpotDAO {
                         .build();
                 parkingSpots.add(parkingSpot);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } 
         return parkingSpots;
     }
 
-    public ParkingSpot getById(Long id) {
+    public ParkingSpot getById(Long id)throws SQLException {
         ParkingSpot parkingSpot = null;
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             String query = "SELECT * FROM parking_spot WHERE id = ?";
@@ -57,13 +56,11 @@ public class ParkingSpotDAO {
                         .status(SpotStatus.valueOf(result.getString("status").toUpperCase()))
                         .build();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } 
         return parkingSpot;
     }
 
-    public List<ParkingSpot> getByParkingLotId(Long parkingLotId) {
+    public List<ParkingSpot> getByParkingLotId(Long parkingLotId) throws SQLException{
         List<ParkingSpot> parkingSpots = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             String query = "SELECT * FROM parking_spot WHERE parking_lot_id = ?";
@@ -79,13 +76,11 @@ public class ParkingSpotDAO {
                         .build();
                 parkingSpots.add(parkingSpot);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } 
         return parkingSpots;
     }
 
-    public void save(ParkingSpot parkingSpot) {
+    public void save(ParkingSpot parkingSpot) throws SQLException{
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             String query = "INSERT INTO parking_spot (parking_lot_id, type, status) VALUES (?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -103,7 +98,7 @@ public class ParkingSpotDAO {
         }
     }
 
-    public void update(ParkingSpot parkingSpot) {
+    public void update(ParkingSpot parkingSpot) throws SQLException{
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             String query = "UPDATE parking_spot SET parking_lot_id = ?, type = ?, status = ? WHERE id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
@@ -112,20 +107,16 @@ public class ParkingSpotDAO {
             statement.setString(3, parkingSpot.getStatus().name());
             statement.setLong(4, parkingSpot.getId());
             statement.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } 
     }
 
-    public void delete(Long id) {
+    public void delete(Long id)throws SQLException {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             String query = "DELETE FROM parking_spot WHERE id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setLong(1, id);
             statement.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } 
     }
 
     // public static void main(String[] args) {

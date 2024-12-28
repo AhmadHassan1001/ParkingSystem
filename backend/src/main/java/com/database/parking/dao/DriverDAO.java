@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,27 +21,24 @@ public class DriverDAO {
     private static final String username = "admin";
     private static final String password = "admin";
     
-    public List<Driver> getAll() {
+    public List<Driver> getAll() throws SQLException {
         List<Driver> drivers = new ArrayList<>();
-        try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            String sql = "SELECT * FROM driver";
-            PreparedStatement statement = connection.prepareStatement(sql);
-            ResultSet result = statement.executeQuery();
-            while (result.next()) {
-                Driver driver = Driver.builder()
-                        .userId(result.getLong("id"))
-                        .licensePlateNumber(result.getString("license_plate_number"))
-                        .paymentMethod(PaymentMethod.valueOf(result.getString("payment_method").toUpperCase()))
-                        .build();
-                drivers.add(driver);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        Connection connection = DriverManager.getConnection(url, username, password);
+        String sql = "SELECT * FROM driver";
+        PreparedStatement statement = connection.prepareStatement(sql);
+        ResultSet result = statement.executeQuery();
+        while (result.next()) {
+            Driver driver = Driver.builder()
+                    .userId(result.getLong("id"))
+                    .licensePlateNumber(result.getString("license_plate_number"))
+                    .paymentMethod(PaymentMethod.valueOf(result.getString("payment_method").toUpperCase()))
+                    .build();
+            drivers.add(driver);
         }
         return drivers;
     }
 
-    public Driver getById(Long userId) {
+    public Driver getById(Long userId) throws SQLException  {
         Driver driver = null;
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             String sql = "SELECT * FROM driver WHERE user_id = ?";
@@ -54,13 +52,11 @@ public class DriverDAO {
                         .paymentMethod(PaymentMethod.valueOf(result.getString("payment_method").toUpperCase()))
                         .build();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
         return driver;
     }
 
-    public void save(Driver driver) {
+    public void save(Driver driver) throws SQLException  {
       try (Connection connection = DriverManager.getConnection(url, username, password)) {
         String sql = "INSERT INTO driver (user_id, license_plate_number, payment_method) VALUES (?, ?, ?)";
         System.out.println("Payment Method: ");
@@ -75,7 +71,7 @@ public class DriverDAO {
       }
     }
 
-    public void update(Driver driver) {
+    public void update(Driver driver) throws SQLException  {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             String sql = "UPDATE driver SET license_plate_number = ?, payment_method = ? WHERE user_id = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -83,25 +79,21 @@ public class DriverDAO {
             statement.setString(2, driver.getPaymentMethod().name());
             statement.setLong(3, driver.getUserId());
             statement.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
-    public void delete(Long id) {
+    public void delete(Long id) throws SQLException  {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             String sql = "DELETE FROM driver WHERE user_id = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setLong(1, id);
             statement.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException  {
         UserDAO userDAO = new UserDAO();
         DriverDAO driverDAO = new DriverDAO();
 
