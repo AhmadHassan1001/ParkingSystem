@@ -15,7 +15,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-// import java.util.concurrent.CopyOnWriteArrayList;
 
 @Service
 public class SseService {
@@ -27,12 +26,13 @@ public class SseService {
     
     public void addEmitter(long userId, SseEmitter emitter) {
         emitters.put(userId, emitter);
-        emitter.onCompletion(() -> emitters.remove(userId));
-        emitter.onTimeout(() -> emitters.remove(userId));
+        // emitter.onCompletion(() -> emitters.remove(userId));
+        // emitter.onTimeout(() -> emitters.remove(userId));
     }
 
-    @Scheduled(fixedRate = 1000)
+    @Scheduled(fixedRate = 100)
     public void sendEvents() throws Exception {
+        System.out.println("Sending events");
         for (Map.Entry<Long, SseEmitter> entry : emitters.entrySet()) {
             try {
                 long userId = entry.getKey();
