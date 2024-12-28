@@ -105,7 +105,7 @@ function ParkingSpotDetails() {
         </div>
       </div>
       <div className="spots">
-        {parkingLot?.managerId == 29 && (<>
+        {parkingLot?.managerId == user?.id && (<>
         <h4 className="title">Reservations:</h4>
         <ul>
           {parkingSpot.reservationsInfo?.map((reservation) => (
