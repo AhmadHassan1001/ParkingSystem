@@ -1,48 +1,64 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
+import { info, login } from '../api';
+import { UserContext } from '../UserContext';
 
 function Login() {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
+  const { user, setUser } = useContext(UserContext);
+
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const url = '/auth/login';
-
     try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name, password }),
+      login(name, password).then((response) => {
+        info().then((data) => {
+          console.log(data);
+          setUser(data);
+
+
+          const role = data.role;
+          // Redirect based on user role
+          if (role === 'DRIVER') {
+            navigate('/search');
+          } else if (role === 'LOT_MANAGER') {
+            navigate('/manager-dashboard');
+          } else if (role === 'ADMIN') {
+            navigate('/admin-dashboard');
+          }
+
+        });
+      }).catch((error) => {
+        console.error('Error:', error);
       });
 
-      if (response.ok) {
-        const data = await response;
-        console.log(data);
-        const { token, role } = data;
-        localStorage.setItem('token', token);
-
-        // Redirect based on user role
-        if (role === 'DRIVER') {
-          navigate('/search');
-        } else if (role === 'MANAGEMENT') {
-          navigate('/manager-dashboard');
-        } else if (role === 'ADMIN') {
-          navigate('/admin-dashboard');
-        }
-      } else {
-        // Handle authentication error
-        console.error('Authentication failed');
-      }
     } catch (error) {
       console.error('Error:', error);
     }
   };
+
+  useEffect(() => {
+    const token = window.localStorage.getItem('token');
+    if (token) {
+      info().then((data) => {
+        console.log(data);
+        const role = data.role;
+        // Redirect based on user role
+        if (role === 'DRIVER') {
+          navigate('/search');
+        } else if (role === 'LOT_MANAGER') {
+          navigate('/manager-dashboard');
+        } else if (role === 'ADMIN') {
+          navigate('/admin-dashboard');
+        }
+
+      });
+    }
+  }, []);
 
   return (
     <div className="login-container">
@@ -70,6 +86,7 @@ function Login() {
           </div>
           <button type="submit" className="login-button">Login</button>
         </form>
+        <button className="signup-button" onClick={() => navigate('/signup')}>Create Account</button>
       </div>
     </div>
   );

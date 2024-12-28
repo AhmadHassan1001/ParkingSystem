@@ -49,10 +49,13 @@ public class ParkingSpotDAO {
             statement.setLong(1, id);
             ResultSet result = statement.executeQuery();
             if (result.next()) {
+                String type = result.getString("type").toUpperCase();
+                if ("EV CHARGING".equals(type))
+                  type = "EV";
                 parkingSpot = ParkingSpot.builder()
                         .id(result.getLong("id"))
                         .parkingLotId(result.getLong("parking_lot_id"))
-                        .type(SpotType.valueOf(result.getString("type").toUpperCase()))
+                        .type(SpotType.valueOf(type))
                         .status(SpotStatus.valueOf(result.getString("status").toUpperCase()))
                         .build();
             }
@@ -68,10 +71,13 @@ public class ParkingSpotDAO {
             statement.setLong(1, parkingLotId);
             ResultSet result = statement.executeQuery();
             while (result.next()) {
+                String type = result.getString("type").toUpperCase();
+                if ("EV CHARGING".equals(type))
+                  type = "EV";
                 ParkingSpot parkingSpot = ParkingSpot.builder()
                         .id(result.getLong("id"))
                         .parkingLotId(result.getLong("parking_lot_id"))
-                        .type(SpotType.valueOf(result.getString("type").toUpperCase()))
+                        .type(SpotType.valueOf(type))
                         .status(SpotStatus.valueOf(result.getString("status").toUpperCase()))
                         .build();
                 parkingSpots.add(parkingSpot);
@@ -102,8 +108,11 @@ public class ParkingSpotDAO {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             String query = "UPDATE parking_spot SET parking_lot_id = ?, type = ?, status = ? WHERE id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
+            String type = parkingSpot.getType().name();
+            if(type.equals("EV"))
+              type = "EV Charging";
             statement.setLong(1, parkingSpot.getParkingLotId());
-            statement.setString(2, parkingSpot.getType().name());
+            statement.setString(2, type);
             statement.setString(3, parkingSpot.getStatus().name());
             statement.setLong(4, parkingSpot.getId());
             statement.executeUpdate();

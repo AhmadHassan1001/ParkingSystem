@@ -7,7 +7,8 @@ function LocationFilter({ location, onChange }) {
 
   useEffect(() => {
     locationList().then((data) => {
-      setCities(data.map((location) => location.city));
+      const uniqueCities = [...new Set(data.map((location) => location.city))];
+      setCities(uniqueCities);
     });
   }, []);
 
