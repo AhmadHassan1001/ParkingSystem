@@ -21,7 +21,7 @@ public class SseController {
     private SseService sseService;
     
     @GetMapping(value = "/sse", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public SseEmitter sse(@RequestHeader("Authorization") String token) {
+    public SseEmitter subscribe (@RequestHeader("Authorization") String token) {
         String bearerToken = token.substring(7); // Remove "Bearer " prefix
         User user = userService.getUserFromToken(bearerToken);
         long userId = user.getId();
@@ -30,6 +30,7 @@ public class SseController {
 
         // add emmiter 
         sseService.addEmitter(userId, emitter);
+        
         return emitter;
     }
 
