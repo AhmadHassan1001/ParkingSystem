@@ -48,15 +48,15 @@ public class ReservationController {
 
     @PostMapping("/{parkingSpotId}/calculate-cost")
     public double calculateCost (@PathVariable long parkingSpotId, @RequestBody ReservationRequest reservationRequest) {
-        LocalDateTime startTime = reservationRequest.getStartTime();
-        LocalDateTime endTime = reservationRequest.getEndTime();
-        if (!checkReservationDuration(parkingSpotId, startTime, endTime)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Reservation duration is invalid");
+        try {
+            LocalDateTime startTime = reservationRequest.getStartTime();
+            LocalDateTime endTime = reservationRequest.getEndTime();
+            long parkingLotId = parkingSpotDAO.getById(parkingSpotId).getParkingLotId();
+            Double cost = parkingLotDAO.getDynamicprice(parkingLotId) * (endTime.getHour() - startTime.getHour());
+            return cost;
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Parking spot does not exist");
         }
-        long parkingLotId = parkingSpotDAO.getById(parkingSpotId).getParkingLotId();
-        Double cost = parkingLotDAO.getDynamicprice(parkingLotId) * (endTime.getHour() - startTime.getHour());
-
-        return cost;
     }
     
     @PostMapping("/{parkingSpotId}/reserve")
@@ -65,9 +65,6 @@ public class ReservationController {
         User user = userService.getUserFromToken(bearerToken);
         LocalDateTime startTime = reservationRequest.getStartTime();
         LocalDateTime endTime = reservationRequest.getEndTime();
-        if (!checkReservationDuration(parkingSpotId, startTime, endTime)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Reservation duration is invalid");
-        }
         Reservation reservation = Reservation.builder()
             .userId(user.getId())
             .parkingSpotId(parkingSpotId)
@@ -78,14 +75,13 @@ public class ReservationController {
             .isPaid(false)
             .build();
         try {
-            reservationDAO.save(reservation);
+            // reservationDAO.save(reservation);
+            reservationDAO.reserve(reservation);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Reservation could not be saved");
         }
-
         return new ResponseEntity<>(reservation, HttpStatus.CREATED);
     }
-
 
     @PostMapping("/{reservationId}/pay")
     public ResponseEntity<Reservation> pay (@RequestHeader("Authorization") String token, @PathVariable long reservationId) {
@@ -106,23 +102,22 @@ public class ReservationController {
         }
     }
 
-
-    boolean checkReservationDuration (long parkingSpotId, LocalDateTime startTime, LocalDateTime endTime) {
-        try {
-            List<Reservation> reservations = reservationDAO.getByParkingSpotId(parkingSpotId);
-            for (Reservation reservation : reservations) {
-                if (reservation.getStatus().equals(ReservationStatus.ACTIVE)) {
-                    LocalDateTime reservationStartTime = reservation.getStartTime();
-                    LocalDateTime reservationEndTime = reservation.getEndTime();
-                    if (startTime.isBefore(reservationEndTime) && endTime.isAfter(reservationStartTime)) {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error");
-        }
-    }
+    // boolean checkReservationDuration (long parkingSpotId, LocalDateTime startTime, LocalDateTime endTime) {
+    //     try {
+    //         List<Reservation> reservations = reservationDAO.getByParkingSpotId(parkingSpotId);
+    //         for (Reservation reservation : reservations) {
+    //             if (reservation.getStatus().equals(ReservationStatus.ACTIVE)) {
+    //                 LocalDateTime reservationStartTime = reservation.getStartTime();
+    //                 LocalDateTime reservationEndTime = reservation.getEndTime();
+    //                 if (startTime.isBefore(reservationEndTime) && endTime.isAfter(reservationStartTime)) {
+    //                     return false;
+    //                 }
+    //             }
+    //         }
+    //         return true;
+    //     } catch (Exception e) {
+    //         throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error");
+    //     }
+    // }
 
 }

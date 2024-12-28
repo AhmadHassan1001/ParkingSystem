@@ -35,11 +35,7 @@ function Signup() {
     try {
       const response = role === 'DRIVER' ? await signupDriver(userData) : await signupParkingLot(userData);
 
-      if (response.ok) {
-        navigate("/login")
-      } else {
-        console.error('Signup failed');
-      }
+      navigate("/login")
     } catch (error) {
       console.error('Error:', error);
     }
