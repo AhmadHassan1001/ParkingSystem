@@ -20,12 +20,22 @@ public class ParkingLotDAO {
     private final String password = "admin";
 
 
-    public Double getDynamicprice (long id) {
-        // TODO: Implement this method
-        return 1.0;
+    public Double getDynamicprice (long id) throws SQLException {
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+            String query = "SELECT calculate_dynamic_price(?)";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setLong(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getDouble(1);
+            } else {
+                return null;
+            }
+            
+        }
     }
 
-    public List<ParkingLot> getAll() {
+    public List<ParkingLot> getAll() throws SQLException {
         List<ParkingLot> parkingLots = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             String query = "SELECT * FROM parking_lot";
@@ -43,13 +53,11 @@ public class ParkingLotDAO {
                         .build();
                 parkingLots.add(parkingLot);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        } 
         return parkingLots;
     }
 
-    public ParkingLot getById(long id) {
+    public ParkingLot getById(long id) throws SQLException  {
         ParkingLot parkingLot = null;
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             String query = "SELECT * FROM parking_lot WHERE id = ?";
@@ -67,13 +75,11 @@ public class ParkingLotDAO {
                         .managerId(resultSet.getLong("manager_id"))
                         .build();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        } 
         return parkingLot;
     }
 
-    public void save(ParkingLot parkingLot) {
+    public void save(ParkingLot parkingLot) throws SQLException  {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             String query = "INSERT INTO parking_lot (name, manager_id, location_id, capacity, basic_price) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -92,7 +98,7 @@ public class ParkingLotDAO {
         }
     }
 
-    public void update(ParkingLot parkingLot) {
+    public void update(ParkingLot parkingLot) throws SQLException  {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             String query = "UPDATE parking_lot SET name = ?, manager_id = ?, location_id = ?, capacity = ?, basic_price = ? WHERE id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
@@ -103,25 +109,21 @@ public class ParkingLotDAO {
             statement.setDouble(5, parkingLot.getBasicPrice());
             statement.setLong(6, parkingLot.getId());
             statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        } 
     }
 
-    public void delete(long id) {
+    public void delete(long id) throws SQLException  {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             String query = "DELETE FROM parking_lot WHERE id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setLong(1, id);
             statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        } 
     }
 
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException  {
         ParkingLotDAO parkingLotDAO = new ParkingLotDAO();
         LocationDAO locationDAO = new LocationDAO();
 
