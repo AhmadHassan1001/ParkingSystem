@@ -130,7 +130,10 @@ public class ReservationDAO {
 
     public void update(Reservation reservation) throws SQLException {
             Connection connection = DriverManager.getConnection(url, username, password);
-            String query = "UPDATE reservation SET user_id = ?, parking_spot_id = ?, start_time = ?, end_time = ?, cost = ?, status = ?, is_paid = ? WHERE id = ?";
+            String query = "start transaction;"
+                + "UPDATE reservation SET user_id = ?, parking_spot_id = ?, start_time = ?, end_time = ?, cost = ?, status = ?, is_paid = ? WHERE id = ?"
+                + "commit;";
+
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setLong(1, reservation.getUserId());
             statement.setLong(2, reservation.getParkingSpotId());
