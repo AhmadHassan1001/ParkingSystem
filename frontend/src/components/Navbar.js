@@ -42,7 +42,7 @@ function Navbar() {
 
   const establishSSE = () => {
     const token = localStorage.getItem('token');
-    eventSource = new EventSource(`http://localhost:8080/notifications`, {
+    eventSource = new EventSource(`http://localhost:8080/sse`, {
       headers: {
       'Authorization': `Bearer ${token}`
       }
