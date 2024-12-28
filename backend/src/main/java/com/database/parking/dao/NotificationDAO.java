@@ -19,6 +19,30 @@ public class NotificationDAO {
     private final String username = "admin";
     private final String password = "admin";
 
+    public List<Notification> getNTopNotifications (long userId, int n) {
+        List<Notification> notifications = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+            String query = "SELECT * FROM notification WHERE user_id = ? ORDER BY date DESC LIMIT ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setLong(1, userId);
+            statement.setInt(2, n);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Notification notification = Notification.builder()
+                        .id(resultSet.getLong("id"))
+                        .userId(resultSet.getLong("user_id"))
+                        .bodyText(resultSet.getString("body_text"))
+                        .date(resultSet.getTimestamp("date").toLocalDateTime())
+                        .build();
+                notifications.add(notification);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return notifications;
+    }
+
+
     public List<Notification> getAll() throws SQLException  {
         List<Notification> notifications = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
