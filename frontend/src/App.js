@@ -14,16 +14,11 @@ import { UserContext } from './UserContext';
 function App() {
   const [user, setUser] = useState(null);
 
-  const notifications = [
-    { message: 'Parking lot 1 is full' },
-    { message: 'Parking lot 2 has a new violation' },
-  ];
-
   return (
     <Router>
       <div className="App">
         <UserContext.Provider value={{ user, setUser }}>
-          <Navbar notifications={notifications} />
+          <Navbar />
           <Routes>
             <Route path="/" element={<SearchScreen />} />
             <Route path="/login" element={<Login />} />

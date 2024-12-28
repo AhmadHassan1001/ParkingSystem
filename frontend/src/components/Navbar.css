@@ -16,7 +16,7 @@
 }
 
 .notification-icon {
-font-size: 2rem;
+  font-size: 2rem;
   cursor: pointer;
 }
 
@@ -35,6 +35,17 @@ font-size: 2rem;
 
 .notifications:hover .notification-dropdown {
   display: block;
+}
+
+.notification-dot {
+  background-color: red;
+  color: white;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .notification-item {
