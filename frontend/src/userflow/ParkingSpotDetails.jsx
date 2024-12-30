@@ -87,7 +87,7 @@ function ParkingSpotDetails() {
         <img src={dummyImg} alt={`Parking Lot ${parkingSpot?.id}`} className="image" />
         <div className="content">
           <div className="header">
-            <h3 className="title">Parking Lot {parkingSpot?.id}</h3>
+            <h3 className="title">Parking Spot {parkingSpot?.id}</h3>
             <span className="info"> 
               <label className='info-label'>Type:</label>
               <label className='type'>{parkingSpot?.type}</label>
